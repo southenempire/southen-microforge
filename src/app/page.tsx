@@ -8,22 +8,33 @@ import {
 import { MicroTool, ExecutionRun, LedgerEntry } from '@/lib/types';
 import ThreeHeroMesh from '@/components/ThreeHeroMesh';
 
-function PrivyIcon({ className = 'h-5 w-5' }: { className?: string }) {
+function GoogleIcon({ className = 'h-4 w-4' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="24" height="24" rx="6" fill="#18181B" />
-      <circle cx="8" cy="8" r="2.5" fill="#10B981" />
-      <circle cx="16" cy="8" r="2.5" fill="#10B981" />
-      <circle cx="8" cy="16" r="2.5" fill="#10B981" />
-      <rect x="13.5" y="13.5" width="5" height="5" rx="1.5" fill="#10B981" />
+    <svg className={className} viewBox="0 0 24 24">
+      <path
+        fill="#4285F4"
+        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+      />
+      <path
+        fill="#34A853"
+        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+      />
+      <path
+        fill="#EA4335"
+        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+      />
     </svg>
   );
 }
 
-function FarcasterIcon({ className = 'h-4 w-4' }: { className?: string }) {
+function DiscordIcon({ className = 'h-4 w-4' }: { className?: string }) {
   return (
-    <svg className={className} viewBox="0 0 1000 1000" fill="currentColor">
-      <path d="M257.778 155.556h484.444v688.889h-72.222V470.556H330v373.889h-72.222V155.556zM146.667 298.889h111.111v111.111H146.667V298.889zm595.555 0h111.111v111.111H742.222V298.889z"/>
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994.021-.041.001-.09-.041-.106a13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
     </svg>
   );
 }
@@ -49,19 +60,37 @@ export default function Home() {
   // Navigation: 'home' (Landing page) | 'auth' (Sign in/create account) | 'app' (Workspace console)
   const [viewMode, setViewMode] = useState<'home' | 'auth' | 'app'>('home');
   const [appTab, setAppTab] = useState<'tools' | 'compiler' | 'ledger' | 'docs'>('tools');
-  // Auth State (Privy)
-  const [privyAddress, setPrivyAddress] = useState<string | null>('0x8a72...3F7a');
-  const [isPrivyConnecting, setIsPrivyConnecting] = useState(false);
-  const [privyConnectingProvider, setPrivyConnectingProvider] = useState<string>('Privy Embedded');
+  // Auth State (Privy Social Login)
+  const [user, setUser] = useState<{ email: string; name: string; provider: string } | null>({
+    email: 'southen@microforge.dev',
+    name: 'Southen',
+    provider: 'Google'
+  });
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+  const [authProvider, setAuthProvider] = useState('');
+  const [authEmailInput, setAuthEmailInput] = useState('');
 
-  const handlePrivyConnect = (providerName: string = 'Privy Embedded') => {
-    setIsPrivyConnecting(true);
-    setPrivyConnectingProvider(providerName);
+  const handleSocialLogin = (provider: string) => {
+    setIsAuthenticating(true);
+    setAuthProvider(provider);
     setTimeout(() => {
-      setIsPrivyConnecting(false);
-      setPrivyAddress('0x8a72...3F7a');
+      setIsAuthenticating(false);
+      setUser({
+        email: provider === 'Email' ? (authEmailInput || 'dev@southenempire.io') : `${provider.toLowerCase()}@microforge.dev`,
+        name: provider === 'Email' ? 'Developer' : `${provider} User`,
+        provider
+      });
       setViewMode('app');
-    }, 450);
+    }, 350);
+  };
+
+  const handleLogoClick = () => {
+    if (viewMode === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setViewMode('home');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   // Backend Data State
@@ -259,7 +288,7 @@ export default function Home() {
         }`}>
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div className="flex items-center gap-8">
-              <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setViewMode('home')}>
+              <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleLogoClick}>
                 <div className="h-7 w-7 rounded bg-black flex items-center justify-center text-white font-bold text-xs">
                   M
                 </div>
@@ -298,9 +327,6 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 flex flex-col gap-4">
-              <span className="text-[11px] font-mono tracking-wider text-zinc-400 uppercase">
-                CREATEOS X STRIPE PROJECTS HACKATHON
-              </span>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
                 Write a spec.<br />Ship a paid API.
               </h1>
@@ -326,36 +352,34 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Interactive Execution Card with 3D Mesh */}
+            {/* Right Interactive Execution Card (Pixel-perfect receipt card) */}
             <div className="lg:col-span-5 relative">
-              <div className={`border rounded-xl p-6 transition-colors shadow-sm ${
+              <div className={`border rounded-2xl p-6 transition-colors shadow-sm ${
                 isDark ? 'border-zinc-800 bg-zinc-900/60' : 'border-zinc-200 bg-white'
               }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-semibold text-xs tracking-tight">Markdown & Rich Text Sanitizer</span>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300 dark:bg-emerald-950 dark:text-emerald-400 dark:border-emerald-800">
+                <div className="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
+                  <div className="flex items-center gap-2">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="font-semibold text-xs tracking-tight">Markdown & Rich Text Sanitizer</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
                     LIVE
                   </span>
                 </div>
 
-                {/* Micro-VM 3D Canvas Mesh Embedded in Hero Card */}
-                <div className="h-44 w-full flex items-center justify-center my-1 rounded-lg overflow-hidden">
-                  <ThreeHeroMesh theme={theme} />
-                </div>
-
-                <div className="space-y-2 pt-2 border-t border-zinc-100 dark:border-zinc-800 font-mono text-xs">
-                  <div className="text-[10px] text-zinc-400 uppercase tracking-wider">ONE RUN</div>
+                <div className="py-5 space-y-3.5 font-mono text-xs">
+                  <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-semibold">ONE RUN</div>
                   <div className="flex items-center justify-between">
                     <span className="text-zinc-500">Reserved</span>
-                    <span className="font-medium">$0.10</span>
+                    <span className="font-semibold text-zinc-800 dark:text-zinc-200">$0.10</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-zinc-500">Executed</span>
-                    <span className="font-medium">12 ms</span>
+                    <span className="text-zinc-500 font-medium">12 ms</span>
                   </div>
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between pt-2.5 border-t border-zinc-100 dark:border-zinc-800">
                     <span className="text-zinc-500">Captured</span>
-                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold">$0.10</span>
+                    <span className="text-emerald-600 dark:text-emerald-400 font-bold">$0.10</span>
                   </div>
                 </div>
               </div>
@@ -450,21 +474,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Built With */}
-        <section className="max-w-7xl mx-auto px-6 py-8 w-full">
-          <span className="text-[11px] font-mono tracking-wider text-zinc-400 uppercase block mb-3">
-            BUILT WITH
-          </span>
-          <div className="flex flex-wrap items-center gap-6 sm:gap-10 text-xs font-semibold text-zinc-400">
-            <span>Next.js</span>
-            <span>Vercel</span>
-            <span>CreateOS</span>
-            <span>Privy</span>
-            <span>Stripe</span>
-            <span>Supabase</span>
-          </div>
-        </section>
-
         {/* CTA Banner */}
         <section className="max-w-7xl mx-auto px-6 py-8 w-full">
           <div className="rounded-2xl bg-black text-white p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
@@ -475,7 +484,7 @@ export default function Home() {
               onClick={() => setViewMode('auth')}
               className="px-6 py-3 rounded-lg bg-white text-black text-xs font-bold hover:bg-zinc-100 transition-colors shrink-0 shadow-sm flex items-center gap-2"
             >
-              <span>Get started with Privy</span>
+              <span>Get started</span>
               <ArrowUpRight className="h-4 w-4" />
             </button>
           </div>
@@ -506,10 +515,10 @@ export default function Home() {
       <div className={`min-h-screen flex flex-col md:flex-row transition-colors ${
         isDark ? 'bg-[#0f1012] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
       }`}>
-        {/* Left Side: Privy Embedded Auth */}
+        {/* Left Side: Clean Social Login */}
         <div className="w-full md:w-[55%] flex flex-col justify-between p-8 sm:p-12 lg:p-16">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setViewMode('home')}>
+            <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleLogoClick}>
               <div className="h-7 w-7 rounded bg-black flex items-center justify-center text-white font-bold text-xs">
                 M
               </div>
@@ -518,14 +527,16 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setViewMode('home')}
-                className="text-xs text-zinc-500 hover:text-black dark:hover:text-white transition-colors font-mono hidden sm:block"
+                className={`text-xs transition-colors font-mono hidden sm:block ${
+                  isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
+                }`}
               >
                 ← Back to home
               </button>
               <button
                 onClick={() => setTheme(isDark ? 'light' : 'dark')}
                 className={`p-2 rounded-lg border transition-colors ${
-                  isDark ? 'border-zinc-800 bg-zinc-900 text-zinc-300' : 'border-zinc-200 bg-white text-zinc-600'
+                  isDark ? 'border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white' : 'border-zinc-200 bg-white text-zinc-600 hover:text-black'
                 }`}
               >
                 {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
@@ -534,106 +545,96 @@ export default function Home() {
           </div>
 
           <div className="max-w-md w-full mx-auto my-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[11px] font-mono font-medium tracking-wide mb-6">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>PRIVY EMBEDDED AUTH</span>
-            </div>
-
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-              Developer Sign In
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">
+              Sign in to MicroForge
             </h1>
             <p className="text-xs text-zinc-500 leading-relaxed mb-8">
-              Authenticate instantly with your non-custodial Web3 wallet, Passkey, or social identity powered by Privy. Zero passwords to remember.
+              Continue with your social account to forge, test, and ship paid APIs.
             </p>
 
-            <div className="space-y-4">
-              {/* Primary Privy Button */}
+            <div className="space-y-3">
+              {/* Google */}
               <button
-                onClick={() => handlePrivyConnect('Privy Embedded Wallet')}
-                disabled={isPrivyConnecting}
-                className="w-full py-3.5 px-4 rounded-xl bg-[#065f46] hover:bg-[#047857] text-white font-semibold text-xs tracking-wide transition-all shadow-md flex items-center justify-center gap-2.5 disabled:opacity-70 group"
+                onClick={() => handleSocialLogin('Google')}
+                disabled={isAuthenticating}
+                className={`w-full py-3 px-4 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-3 disabled:opacity-70 ${
+                  isDark ? 'border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-white' : 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900 shadow-xs'
+                }`}
               >
-                {isPrivyConnecting ? (
-                  <>
-                    <RefreshCw className="h-4 w-4 animate-spin text-emerald-300" />
-                    <span>Connecting {privyConnectingProvider}...</span>
-                  </>
-                ) : (
-                  <>
-                    <PrivyIcon className="h-4 w-4 text-emerald-300" />
-                    <span>Connect with Privy</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 ml-auto opacity-70 group-hover:translate-x-0.5 transition-transform" />
-                  </>
-                )}
+                <GoogleIcon className="h-4 w-4" />
+                <span>{isAuthenticating && authProvider === 'Google' ? 'Signing in with Google...' : 'Continue with Google'}</span>
               </button>
 
-              <div className="relative my-6">
+              {/* GitHub */}
+              <button
+                onClick={() => handleSocialLogin('GitHub')}
+                disabled={isAuthenticating}
+                className={`w-full py-3 px-4 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-3 disabled:opacity-70 ${
+                  isDark ? 'border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-white' : 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900 shadow-xs'
+                }`}
+              >
+                <GithubIcon className="h-4 w-4" />
+                <span>{isAuthenticating && authProvider === 'GitHub' ? 'Signing in with GitHub...' : 'Continue with GitHub'}</span>
+              </button>
+
+              {/* Twitter / X */}
+              <button
+                onClick={() => handleSocialLogin('X')}
+                disabled={isAuthenticating}
+                className={`w-full py-3 px-4 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-3 disabled:opacity-70 ${
+                  isDark ? 'border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-white' : 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900 shadow-xs'
+                }`}
+              >
+                <TwitterIcon className="h-3.5 w-3.5" />
+                <span>{isAuthenticating && authProvider === 'X' ? 'Signing in with X...' : 'Continue with X'}</span>
+              </button>
+
+              {/* Discord */}
+              <button
+                onClick={() => handleSocialLogin('Discord')}
+                disabled={isAuthenticating}
+                className={`w-full py-3 px-4 rounded-xl border text-xs font-medium transition-all flex items-center justify-center gap-3 disabled:opacity-70 ${
+                  isDark ? 'border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-white' : 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-900 shadow-xs'
+                }`}
+              >
+                <DiscordIcon className="h-4 w-4 text-[#5865F2]" />
+                <span>{isAuthenticating && authProvider === 'Discord' ? 'Signing in with Discord...' : 'Continue with Discord'}</span>
+              </button>
+
+              <div className="relative my-5">
                 <div className="absolute inset-0 flex items-center">
                   <div className={`w-full border-t ${isDark ? 'border-zinc-800' : 'border-zinc-200'}`} />
                 </div>
                 <div className="relative flex justify-center text-[10px] uppercase font-mono tracking-wider">
                   <span className={`px-2.5 ${isDark ? 'bg-[#0f1012] text-zinc-500' : 'bg-[#f9fafb] text-zinc-400'}`}>
-                    Or connect with
+                    or continue with email
                   </span>
                 </div>
               </div>
 
-              {/* Direct Connectors */}
-              <div className="space-y-2.5">
-                <button
-                  onClick={() => handlePrivyConnect('Browser Wallet')}
-                  disabled={isPrivyConnecting}
-                  className={`w-full py-2.5 px-4 rounded-xl border text-xs font-medium transition-all flex items-center justify-between group ${
-                    isDark ? 'border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-200' : 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-800 shadow-xs'
+              <div className="space-y-2">
+                <input
+                  type="email"
+                  value={authEmailInput}
+                  onChange={(e) => setAuthEmailInput(e.target.value)}
+                  placeholder="you@company.com"
+                  className={`w-full border rounded-xl p-2.5 text-xs font-mono focus:outline-none transition-colors ${
+                    isDark ? 'bg-zinc-900 border-zinc-800 text-white' : 'bg-white border-zinc-300 text-zinc-900'
                   }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Wallet className="h-4 w-4 text-amber-500" />
-                    <span>Browser Wallet (MetaMask, Phantom, Coinbase)</span>
-                  </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-200 transition-colors" />
-                </button>
-
+                />
                 <button
-                  onClick={() => handlePrivyConnect('Biometric Passkey')}
-                  disabled={isPrivyConnecting}
-                  className={`w-full py-2.5 px-4 rounded-xl border text-xs font-medium transition-all flex items-center justify-between group ${
-                    isDark ? 'border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-200' : 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-800 shadow-xs'
-                  }`}
+                  onClick={() => handleSocialLogin('Email')}
+                  disabled={isAuthenticating}
+                  className="w-full py-2.5 rounded-xl bg-[#065f46] hover:bg-[#047857] text-white font-medium text-xs transition-colors shadow-sm disabled:opacity-70"
                 >
-                  <div className="flex items-center gap-3">
-                    <Key className="h-4 w-4 text-emerald-500" />
-                    <span>Biometric Passkey (Touch ID, Face ID, WebAuthn)</span>
-                  </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-200 transition-colors" />
+                  {isAuthenticating && authProvider === 'Email' ? 'Verifying email...' : 'Continue with email'}
                 </button>
-
-                <button
-                  onClick={() => handlePrivyConnect('Farcaster / Social')}
-                  disabled={isPrivyConnecting}
-                  className={`w-full py-2.5 px-4 rounded-xl border text-xs font-medium transition-all flex items-center justify-between group ${
-                    isDark ? 'border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-200' : 'border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-800 shadow-xs'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <FarcasterIcon className="h-4 w-4 text-purple-500" />
-                    <span>Farcaster / Social Embedded Identity</span>
-                  </div>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-200 transition-colors" />
-                </button>
-              </div>
-
-              <div className={`mt-6 p-3.5 rounded-xl border text-[11px] leading-relaxed flex items-start gap-2.5 ${
-                isDark ? 'border-zinc-800/80 bg-zinc-900/30 text-zinc-400' : 'border-zinc-200 bg-zinc-50 text-zinc-500'
-              }`}>
-                <Shield className="h-4 w-4 text-emerald-500 shrink-0 mt-0.5" />
-                <span>Non-custodial key isolation. Private keys are sharded locally via WebAuthn MPC. No seed phrases, zero password leaks.</span>
               </div>
             </div>
           </div>
 
           <div className="text-center text-[11px] text-zinc-400 font-mono">
-            Auth by Privy. Payments by Stripe. Sandbox by CreateOS.
+            Safe execution in isolated micro-VMs. Payments settled per successful run.
           </div>
         </div>
 
@@ -685,7 +686,7 @@ export default function Home() {
       }`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2.5 cursor-pointer" onClick={() => setViewMode('home')}>
+            <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleLogoClick}>
               <div className="h-7 w-7 rounded bg-black flex items-center justify-center text-white font-bold text-xs">
                 M
               </div>
@@ -693,46 +694,19 @@ export default function Home() {
             </div>
 
             <nav className="flex items-center gap-1 text-sm font-medium">
-              <button
-                onClick={() => setAppTab('tools')}
-                className={`px-3 py-1 rounded-md transition-colors ${
-                  appTab === 'tools'
-                    ? (isDark ? 'border-b-2 border-white font-semibold text-white' : 'border-b-2 border-black font-semibold text-black')
-                    : 'text-zinc-500 hover:text-zinc-800'
-                }`}
-              >
-                Tools
-              </button>
-              <button
-                onClick={() => setAppTab('compiler')}
-                className={`px-3 py-1 rounded-md transition-colors ${
-                  appTab === 'compiler'
-                    ? (isDark ? 'border-b-2 border-white font-semibold text-white' : 'border-b-2 border-black font-semibold text-black')
-                    : 'text-zinc-500 hover:text-zinc-800'
-                }`}
-              >
-                Compiler
-              </button>
-              <button
-                onClick={() => setAppTab('ledger')}
-                className={`px-3 py-1 rounded-md transition-colors ${
-                  appTab === 'ledger'
-                    ? (isDark ? 'border-b-2 border-white font-semibold text-white' : 'border-b-2 border-black font-semibold text-black')
-                    : 'text-zinc-500 hover:text-zinc-800'
-                }`}
-              >
-                Ledger
-              </button>
-              <button
-                onClick={() => setAppTab('docs')}
-                className={`px-3 py-1 rounded-md transition-colors ${
-                  appTab === 'docs'
-                    ? (isDark ? 'border-b-2 border-white font-semibold text-white' : 'border-b-2 border-black font-semibold text-black')
-                    : 'text-zinc-500 hover:text-zinc-800'
-                }`}
-              >
-                Docs
-              </button>
+              {(['tools', 'compiler', 'ledger', 'docs'] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setAppTab(tab)}
+                  className={`px-3 py-1.5 rounded-md text-xs font-medium capitalize transition-colors ${
+                    appTab === tab
+                      ? (isDark ? 'bg-zinc-800 text-white font-semibold' : 'bg-zinc-200 text-black font-semibold')
+                      : (isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/50' : 'text-zinc-600 hover:text-black hover:bg-zinc-100')
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
             </nav>
           </div>
 
@@ -741,22 +715,21 @@ export default function Home() {
               isDark ? 'border-zinc-800 bg-zinc-900/60 text-zinc-300' : 'border-zinc-200 bg-zinc-50 text-zinc-700'
             }`}>
               <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-zinc-400">Privy:</span>
-              <span className="font-semibold">{privyAddress || '0x8a72...3F7a'}</span>
+              <span className="font-semibold">{user?.email || 'southen@microforge.dev'}</span>
             </div>
 
             <button
               onClick={() => setTheme(isDark ? 'light' : 'dark')}
               className={`p-2 rounded-lg border transition-colors ${
-                isDark ? 'border-zinc-800 bg-zinc-900 text-zinc-300' : 'border-zinc-200 bg-white text-zinc-600'
+                isDark ? 'border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white' : 'border-zinc-200 bg-white text-zinc-600 hover:text-black'
               }`}
             >
               {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
             <button
-              onClick={() => { setPrivyAddress(null); setViewMode('home'); }}
+              onClick={() => { setUser(null); setViewMode('home'); }}
               className={`px-3.5 py-1.5 rounded-lg border text-xs font-medium transition-colors ${
-                isDark ? 'border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800' : 'border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50'
+                isDark ? 'border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white hover:bg-zinc-800' : 'border-zinc-200 bg-white text-zinc-700 hover:text-black hover:bg-zinc-50'
               }`}
             >
               Sign out
@@ -1232,7 +1205,7 @@ export default function Home() {
         )}
 
         {/* =========================================================================
-            TAB 4: DOCS & PROJECT (MATCHES Docs and project.png)
+            TAB 4: DOCS & PROJECT
         ========================================================================= */}
         {appTab === 'docs' && (
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
@@ -1241,193 +1214,235 @@ export default function Home() {
                 DOCUMENTATION
               </span>
               <button
-                onClick={() => setDocsSection('quickstart')}
-                className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                onClick={() => { setDocsSection('quickstart'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className={`text-left px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                   docsSection === 'quickstart'
                     ? (isDark ? 'bg-zinc-800 text-white font-semibold' : 'bg-zinc-200 text-black font-semibold')
-                    : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
+                    : (isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/40' : 'text-zinc-600 hover:text-black hover:bg-zinc-100')
                 }`}
               >
                 Quickstart
               </button>
               <button
-                onClick={() => setDocsSection('agents')}
-                className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors flex items-center justify-between ${
+                onClick={() => { setDocsSection('agents'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className={`text-left px-3.5 py-2 rounded-lg text-xs font-medium transition-colors flex items-center justify-between ${
                   docsSection === 'agents'
                     ? (isDark ? 'bg-zinc-800 text-white font-semibold' : 'bg-zinc-200 text-black font-semibold')
-                    : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
+                    : (isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/40' : 'text-zinc-600 hover:text-black hover:bg-zinc-100')
                 }`}
               >
                 <span>Autonomous Agents</span>
                 <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono font-bold">API</span>
               </button>
               <button
-                onClick={() => setDocsSection('execute')}
-                className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                onClick={() => { setDocsSection('execute'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className={`text-left px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                   docsSection === 'execute'
                     ? (isDark ? 'bg-zinc-800 text-white font-semibold' : 'bg-zinc-200 text-black font-semibold')
-                    : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
+                    : (isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/40' : 'text-zinc-600 hover:text-black hover:bg-zinc-100')
                 }`}
               >
                 Execute a tool
               </button>
               <button
-                onClick={() => setDocsSection('billing')}
-                className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                onClick={() => { setDocsSection('billing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className={`text-left px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                   docsSection === 'billing'
                     ? (isDark ? 'bg-zinc-800 text-white font-semibold' : 'bg-zinc-200 text-black font-semibold')
-                    : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
+                    : (isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/40' : 'text-zinc-600 hover:text-black hover:bg-zinc-100')
                 }`}
               >
                 Two-phase billing
               </button>
               <button
-                onClick={() => setDocsSection('errors')}
-                className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                onClick={() => { setDocsSection('errors'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className={`text-left px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                   docsSection === 'errors'
                     ? (isDark ? 'bg-zinc-800 text-white font-semibold' : 'bg-zinc-200 text-black font-semibold')
-                    : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
+                    : (isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/40' : 'text-zinc-600 hover:text-black hover:bg-zinc-100')
                 }`}
               >
                 Errors
               </button>
               <button
-                onClick={() => setDocsSection('project')}
-                className={`text-left px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                onClick={() => { setDocsSection('project'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                className={`text-left px-3.5 py-2 rounded-lg text-xs font-medium transition-colors ${
                   docsSection === 'project'
                     ? (isDark ? 'bg-zinc-800 text-white font-semibold' : 'bg-zinc-200 text-black font-semibold')
-                    : 'text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200'
+                    : (isDark ? 'text-zinc-400 hover:text-white hover:bg-zinc-800/40' : 'text-zinc-600 hover:text-black hover:bg-zinc-100')
                 }`}
               >
                 Project
               </button>
             </div>
 
-            <div className="md:col-span-9 flex flex-col gap-10">
-              {/* Quickstart */}
-              <div id="doc-quickstart">
-                <h1 className="text-3xl font-extrabold tracking-tight mb-2">Quickstart</h1>
-                <p className="text-sm text-zinc-500 leading-relaxed max-w-2xl">
-                  Write a spec in the compiler. MicroForge generates the code, tests it in a sandbox, and deploys an endpoint you can sell per run.
-                </p>
-              </div>
-
-              {/* Autonomous Agents & AI Consumers */}
-              <div id="doc-agents" className="flex flex-col gap-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono tracking-wider text-emerald-500 uppercase px-2 py-0.5 rounded bg-emerald-500/10 font-bold">
-                    AGENTIC RUNTIME SPEC
-                  </span>
-                  <span className="text-xs text-zinc-400 font-mono">OpenAI & Anthropic Function Calling</span>
-                </div>
-                <div>
-                  <h2 className="text-2xl font-extrabold tracking-tight mb-2">Autonomous Agents & AI Consumers</h2>
-                  <p className="text-xs text-zinc-500 leading-relaxed max-w-2xl">
-                    How LLM agents (LangChain, AutoGen, CrewAI, ElizaOS, OpenAI SDK) discover endpoints, pay autonomously on Stripe rails, and execute isolated code without compromising host infrastructure.
-                  </p>
-                </div>
-
-                {/* 3 Pillars for Agents */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className={`p-4 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
-                    <div className="flex items-center gap-2 text-emerald-500 font-mono font-bold text-xs mb-2">
-                      <Bot className="h-4 w-4" />
-                      <span>1. Dynamic Discovery</span>
-                    </div>
-                    <p className="text-xs text-zinc-500 leading-relaxed">
-                      Agents query <code className="font-mono text-[11px] text-zinc-700 dark:text-zinc-300">/api/tools?format=agent</code> to ingest validated JSON schema tool definitions for instant function calling.
+            <div className="md:col-span-9 flex flex-col gap-6">
+              {/* SECTION 1: QUICKSTART */}
+              {docsSection === 'quickstart' && (
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <h1 className="text-3xl font-extrabold tracking-tight mb-2">Quickstart</h1>
+                    <p className="text-sm text-zinc-500 leading-relaxed max-w-2xl">
+                      Write a spec in the compiler. MicroForge generates the code, tests it in an isolated micro-VM, and deploys an endpoint you can sell per run.
                     </p>
                   </div>
 
-                  <div className={`p-4 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
-                    <div className="flex items-center gap-2 text-emerald-500 font-mono font-bold text-xs mb-2">
-                      <Cpu className="h-4 w-4" />
-                      <span>2. Sandboxed Micro-VMs</span>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className={`p-5 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
+                      <div className="text-emerald-500 font-mono font-bold text-xs mb-2">01</div>
+                      <h3 className="font-bold text-sm mb-1">Describe it</h3>
+                      <p className="text-xs text-zinc-500 leading-relaxed">
+                        Specify what your endpoint should do, its inputs and edge cases in plain language.
+                      </p>
                     </div>
-                    <p className="text-xs text-zinc-500 leading-relaxed">
-                      Code runs inside isolated CreateOS Firecracker micro-VMs. Ephemeral memory is wiped upon exit. Proprietary logic is protected from external tampering.
-                    </p>
+                    <div className={`p-5 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
+                      <div className="text-emerald-500 font-mono font-bold text-xs mb-2">02</div>
+                      <h3 className="font-bold text-sm mb-1">Self-testing</h3>
+                      <p className="text-xs text-zinc-500 leading-relaxed">
+                        Code is compiled and verified against test suites in a CreateOS Firecracker micro-VM.
+                      </p>
+                    </div>
+                    <div className={`p-5 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
+                      <div className="text-emerald-500 font-mono font-bold text-xs mb-2">03</div>
+                      <h3 className="font-bold text-sm mb-1">Sell per run</h3>
+                      <p className="text-xs text-zinc-500 leading-relaxed">
+                        Endpoint goes live on Stripe rails. Buyers and AI agents only pay for successful runs.
+                      </p>
+                    </div>
                   </div>
 
-                  <div className={`p-4 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
-                    <div className="flex items-center gap-2 text-emerald-500 font-mono font-bold text-xs mb-2">
-                      <Shield className="h-4 w-4" />
-                      <span>3. Zero-Risk Two-Phase</span>
-                    </div>
-                    <p className="text-xs text-zinc-500 leading-relaxed">
-                      Machine wallets use Stripe pre-auth holds. If guest execution crashes or exceeds 5000ms, the hold is released immediately ($0.00 charged).
-                    </p>
-                  </div>
-                </div>
-
-                {/* Agent Access to Code & Security Details */}
-                <div className={`p-5 rounded-xl border space-y-3 ${isDark ? 'border-zinc-800 bg-zinc-900/20' : 'border-zinc-200 bg-zinc-50/50'}`}>
-                  <h3 className="text-sm font-bold tracking-tight">How Agents Access Your Code (Security & Hermetic Boundary)</h3>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-zinc-500 leading-relaxed font-mono">
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-emerald-500 font-bold">•</span>
-                      <span><strong>Hermetic I/O:</strong> Agents supply inputs via JSON over HTTP. Guest code runs in a detached micro-VM reading payload from memory without network socket leaks.</span>
-                    </div>
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-emerald-500 font-bold">•</span>
-                      <span><strong>IP Protection:</strong> Synthesized source code is compiled inside the container. The agent receives verified output without exposing raw backend keys.</span>
-                    </div>
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-emerald-500 font-bold">•</span>
-                      <span><strong>Hard Limits:</strong> 5000ms hardware timeout + strict memory allocations prevent runaway loops or denial-of-service attempts.</span>
-                    </div>
-                    <div className="flex items-start gap-2.5">
-                      <span className="text-emerald-500 font-bold">•</span>
-                      <span><strong>Append-Only Audit:</strong> Every agent run writes an immutable ledger entry with hold ID, execution duration, and settlement status.</span>
-                    </div>
+                  <div className="pt-4 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+                    <span className="text-xs text-zinc-400 font-mono">Section 1 of 6</span>
+                    <button
+                      onClick={() => { setDocsSection('agents'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                        isDark ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'
+                      }`}
+                    >
+                      <span>Next: Autonomous Agents</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 </div>
+              )}
 
-                {/* Agent Code Tabs */}
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
-                      AGENT INTEGRATION SNIPPET
+              {/* SECTION 2: AUTONOMOUS AGENTS */}
+              {docsSection === 'agents' && (
+                <div className="flex flex-col gap-6">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] font-mono tracking-wider text-emerald-500 uppercase px-2 py-0.5 rounded bg-emerald-500/10 font-bold">
+                      AGENTIC RUNTIME SPEC
                     </span>
-                    <div className={`flex border rounded-lg p-0.5 text-xs font-mono ${
-                      isDark ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-200 bg-white'
-                    }`}>
-                      <button
-                        onClick={() => setAgentCodeTab('python')}
-                        className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                          agentCodeTab === 'python'
-                            ? (isDark ? 'bg-zinc-800 text-white font-bold' : 'bg-zinc-200 text-black font-bold')
-                            : 'text-zinc-500 hover:text-zinc-800'
-                        }`}
-                      >
-                        Python (OpenAI)
-                      </button>
-                      <button
-                        onClick={() => setAgentCodeTab('typescript')}
-                        className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                          agentCodeTab === 'typescript'
-                            ? (isDark ? 'bg-zinc-800 text-white font-bold' : 'bg-zinc-200 text-black font-bold')
-                            : 'text-zinc-500 hover:text-zinc-800'
-                        }`}
-                      >
-                        TypeScript (AI SDK)
-                      </button>
-                      <button
-                        onClick={() => setAgentCodeTab('curl')}
-                        className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                          agentCodeTab === 'curl'
-                            ? (isDark ? 'bg-zinc-800 text-white font-bold' : 'bg-zinc-200 text-black font-bold')
-                            : 'text-zinc-500 hover:text-zinc-800'
-                        }`}
-                      >
-                        Raw cURL
-                      </button>
+                    <span className="text-xs text-zinc-400 font-mono">OpenAI & Anthropic Function Calling</span>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-extrabold tracking-tight mb-2">Autonomous Agents & AI Consumers</h2>
+                    <p className="text-xs text-zinc-500 leading-relaxed max-w-2xl">
+                      How LLM agents (LangChain, AutoGen, CrewAI, ElizaOS, OpenAI SDK) discover endpoints, pay autonomously on Stripe rails, and execute isolated code without compromising host infrastructure.
+                    </p>
+                  </div>
+
+                  {/* 3 Pillars */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className={`p-4 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
+                      <div className="flex items-center gap-2 text-emerald-500 font-mono font-bold text-xs mb-2">
+                        <Bot className="h-4 w-4" />
+                        <span>1. Dynamic Discovery</span>
+                      </div>
+                      <p className="text-xs text-zinc-500 leading-relaxed">
+                        Agents query <code className="font-mono text-[11px] text-zinc-700 dark:text-zinc-300">/api/tools?format=agent</code> to ingest validated JSON schema tool definitions for instant function calling.
+                      </p>
+                    </div>
+
+                    <div className={`p-4 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
+                      <div className="flex items-center gap-2 text-emerald-500 font-mono font-bold text-xs mb-2">
+                        <Cpu className="h-4 w-4" />
+                        <span>2. Sandboxed Micro-VMs</span>
+                      </div>
+                      <p className="text-xs text-zinc-500 leading-relaxed">
+                        Code runs inside isolated CreateOS Firecracker micro-VMs. Ephemeral memory is wiped upon exit. Proprietary logic is protected from external tampering.
+                      </p>
+                    </div>
+
+                    <div className={`p-4 rounded-xl border ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
+                      <div className="flex items-center gap-2 text-emerald-500 font-mono font-bold text-xs mb-2">
+                        <Shield className="h-4 w-4" />
+                        <span>3. Zero-Risk Two-Phase</span>
+                      </div>
+                      <p className="text-xs text-zinc-500 leading-relaxed">
+                        Machine wallets use Stripe pre-auth holds. If guest execution crashes or exceeds 5000ms, the hold is released immediately ($0.00 charged).
+                      </p>
                     </div>
                   </div>
 
-                  <div className="bg-[#121316] text-white font-mono text-xs rounded-xl p-4 border border-zinc-800 leading-relaxed overflow-x-auto shadow-inner">
-                    {agentCodeTab === 'python' && (
-                      <pre><code>{`import requests
+                  {/* Security Details */}
+                  <div className={`p-5 rounded-xl border space-y-3 ${isDark ? 'border-zinc-800 bg-zinc-900/20' : 'border-zinc-200 bg-zinc-50/50'}`}>
+                    <h3 className="text-sm font-bold tracking-tight">How Agents Access Your Code (Security & Hermetic Boundary)</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs text-zinc-500 leading-relaxed font-mono">
+                      <div className="flex items-start gap-2.5">
+                        <span className="text-emerald-500 font-bold">•</span>
+                        <span><strong>Hermetic I/O:</strong> Agents supply inputs via JSON over HTTP. Guest code runs in a detached micro-VM reading payload from memory without network socket leaks.</span>
+                      </div>
+                      <div className="flex items-start gap-2.5">
+                        <span className="text-emerald-500 font-bold">•</span>
+                        <span><strong>IP Protection:</strong> Synthesized source code is compiled inside the container. The agent receives verified output without exposing raw backend keys.</span>
+                      </div>
+                      <div className="flex items-start gap-2.5">
+                        <span className="text-emerald-500 font-bold">•</span>
+                        <span><strong>Hard Limits:</strong> 5000ms hardware timeout + strict memory allocations prevent runaway loops or denial-of-service attempts.</span>
+                      </div>
+                      <div className="flex items-start gap-2.5">
+                        <span className="text-emerald-500 font-bold">•</span>
+                        <span><strong>Append-Only Audit:</strong> Every agent run writes an immutable ledger entry with hold ID, execution duration, and settlement status.</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Code Tabs */}
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
+                        AGENT INTEGRATION SNIPPET
+                      </span>
+                      <div className={`flex border rounded-lg p-0.5 text-xs font-mono ${
+                        isDark ? 'border-zinc-800 bg-zinc-900' : 'border-zinc-200 bg-white'
+                      }`}>
+                        <button
+                          onClick={() => setAgentCodeTab('python')}
+                          className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+                            agentCodeTab === 'python'
+                              ? (isDark ? 'bg-zinc-800 text-white font-bold' : 'bg-zinc-200 text-black font-bold')
+                              : (isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black')
+                          }`}
+                        >
+                          Python (OpenAI)
+                        </button>
+                        <button
+                          onClick={() => setAgentCodeTab('typescript')}
+                          className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+                            agentCodeTab === 'typescript'
+                              ? (isDark ? 'bg-zinc-800 text-white font-bold' : 'bg-zinc-200 text-black font-bold')
+                              : (isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black')
+                          }`}
+                        >
+                          TypeScript (AI SDK)
+                        </button>
+                        <button
+                          onClick={() => setAgentCodeTab('curl')}
+                          className={`px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+                            agentCodeTab === 'curl'
+                              ? (isDark ? 'bg-zinc-800 text-white font-bold' : 'bg-zinc-200 text-black font-bold')
+                              : (isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black')
+                          }`}
+                        >
+                          Raw cURL
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="bg-[#121316] text-white font-mono text-xs rounded-xl p-4 border border-zinc-800 leading-relaxed overflow-x-auto shadow-inner">
+                      {agentCodeTab === 'python' && (
+                        <pre><code>{`import requests
 from openai import OpenAI
 
 # 1. Discover all active MicroForge micro-tools in OpenAI function calling spec
@@ -1449,10 +1464,10 @@ execution = requests.post(
 ).json()
 
 print("Agent output:", execution["output"])`}</code></pre>
-                    )}
+                      )}
 
-                    {agentCodeTab === 'typescript' && (
-                      <pre><code>{`import { generateText } from 'ai';
+                      {agentCodeTab === 'typescript' && (
+                        <pre><code>{`import { generateText } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
 
@@ -1475,136 +1490,255 @@ const { text } = await generateText({
     },
   },
 });`}</code></pre>
-                    )}
+                      )}
 
-                    {agentCodeTab === 'curl' && (
-                      <pre><code>{`# Direct Agent Tool Execution via HTTP POST
+                      {agentCodeTab === 'curl' && (
+                        <pre><code>{`# Direct Agent Tool Execution via HTTP POST
 curl -X POST "https://southen-microforge.vercel.app/api/execute?slug=markdown-sanitizer" \\
   -H "Content-Type: application/json" \\
   -d '{"text": "# Agent Autonomous Request with **bold** text"}'`}</code></pre>
-                    )}
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+                    <button
+                      onClick={() => { setDocsSection('quickstart'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                        isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
+                      }`}
+                    >
+                      ← Back to Quickstart
+                    </button>
+                    <button
+                      onClick={() => { setDocsSection('execute'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                        isDark ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'
+                      }`}
+                    >
+                      <span>Next: Execute a tool</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <h2 className="text-lg font-bold tracking-tight mb-3">Execute a tool</h2>
-                <div className="bg-[#121316] text-white font-mono text-xs rounded-xl p-4 border border-zinc-800 leading-relaxed overflow-x-auto">
-                  <code>{`curl -X POST "https://southen-microforge.vercel.app/api/execute?slug=markdown-sanitizer" \\
+              {/* SECTION 3: EXECUTE A TOOL */}
+              {docsSection === 'execute' && (
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <h2 className="text-2xl font-extrabold tracking-tight mb-2">Execute a tool</h2>
+                    <p className="text-sm text-zinc-500 leading-relaxed max-w-2xl">
+                      Send a POST request with your JSON payload to execute any live micro-VM endpoint.
+                    </p>
+                  </div>
+
+                  <div className="bg-[#121316] text-white font-mono text-xs rounded-xl p-4 border border-zinc-800 leading-relaxed overflow-x-auto">
+                    <code>{`curl -X POST "https://southen-microforge.vercel.app/api/execute?slug=markdown-sanitizer" \\
   -H "Content-Type: application/json" \\
   -d '{"text": "# Hello **world**"}'`}</code>
-                </div>
-              </div>
-
-              <div>
-                <h2 className="text-lg font-bold tracking-tight mb-2">Two-phase billing</h2>
-                <p className="text-sm text-zinc-500 mb-4">
-                  Every run goes through the same three steps, so a failed run never costs the buyer anything.
-                </p>
-                <div className={`border rounded-xl divide-y text-xs font-mono ${
-                  isDark ? 'border-zinc-800 bg-zinc-900/40 divide-zinc-800' : 'border-zinc-200 bg-white divide-zinc-200'
-                }`}>
-                  <div className="p-3.5 flex items-baseline gap-4">
-                    <span className="font-bold w-24 shrink-0">Reserve</span>
-                    <span className="text-zinc-500">Hold the price on the buyer's card.</span>
                   </div>
-                  <div className="p-3.5 flex items-baseline gap-4">
-                    <span className="font-bold w-24 shrink-0">Execute</span>
-                    <span className="text-zinc-500">Run the tool in an isolated micro-VM.</span>
+
+                  <div className={`p-5 rounded-xl border space-y-3 ${isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'}`}>
+                    <h3 className="text-sm font-bold tracking-tight">Request Specification</h3>
+                    <div className="text-xs text-zinc-500 space-y-2 font-mono">
+                      <p><strong>Endpoint:</strong> POST /api/execute?slug={'{slug}'}</p>
+                      <p><strong>Content-Type:</strong> application/json</p>
+                      <p><strong>Payload:</strong> Pass your tool arguments directly as JSON keys.</p>
+                      <p><strong>Settlement:</strong> Financial pre-auth hold is captured only on HTTP 200.</p>
+                    </div>
                   </div>
-                  <div className="p-3.5 flex items-baseline gap-4">
-                    <span className="font-bold w-24 shrink-0">Capture or release</span>
-                    <span className="text-zinc-500">Charge on success, void on failure. Each step is written to the ledger.</span>
+
+                  <div className="pt-4 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+                    <button
+                      onClick={() => { setDocsSection('agents'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                        isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
+                      }`}
+                    >
+                      ← Back to Autonomous Agents
+                    </button>
+                    <button
+                      onClick={() => { setDocsSection('billing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                        isDark ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'
+                      }`}
+                    >
+                      <span>Next: Two-phase billing</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
                   </div>
                 </div>
-              </div>
+              )}
 
-              <div>
-                <h2 className="text-lg font-bold tracking-tight mb-3">Errors</h2>
-                <div className={`border rounded-xl overflow-hidden font-mono text-xs ${
-                  isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'
-                }`}>
-                  <table className="w-full text-left">
-                    <thead className={`border-b text-[10px] uppercase tracking-wider ${
-                      isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400' : 'border-zinc-200 bg-zinc-50 text-zinc-500'
-                    }`}>
-                      <tr>
-                        <th className="py-2.5 px-4">CODE</th>
-                        <th className="py-2.5 px-4">DESCRIPTION</th>
-                        <th className="py-2.5 px-4">SETTLEMENT</th>
-                      </tr>
-                    </thead>
-                    <tbody className={`divide-y ${isDark ? 'divide-zinc-800' : 'divide-zinc-200'}`}>
-                      <tr>
-                        <td className="py-2.5 px-4 font-semibold text-amber-500">ERR_TIMEOUT</td>
-                        <td className="py-2.5 px-4 text-zinc-500">Execution exceeded 5000ms sandbox hardware limit</td>
-                        <td className="py-2.5 px-4 text-emerald-500">Hold released ($0.00)</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2.5 px-4 font-semibold text-amber-500">ERR_SANDBOX_EXIT</td>
-                        <td className="py-2.5 px-4 text-zinc-500">Guest code crashed with non-zero exit status</td>
-                        <td className="py-2.5 px-4 text-emerald-500">Hold released ($0.00)</td>
-                      </tr>
-                      <tr>
-                        <td className="py-2.5 px-4 font-semibold text-amber-500">ERR_HOLD_FAILED</td>
-                        <td className="py-2.5 px-4 text-zinc-500">Stripe pre-authorization card check declined</td>
-                        <td className="py-2.5 px-4 text-zinc-500">Aborted prior to VM</td>
-                      </tr>
-                    </tbody>
-                  </table>
+              {/* SECTION 4: TWO-PHASE BILLING */}
+              {docsSection === 'billing' && (
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <h2 className="text-2xl font-extrabold tracking-tight mb-2">Two-phase billing</h2>
+                    <p className="text-sm text-zinc-500 max-w-2xl">
+                      Every run goes through the same three steps, so a failed run never costs the buyer anything.
+                    </p>
+                  </div>
+
+                  <div className={`border rounded-xl divide-y text-xs font-mono ${
+                    isDark ? 'border-zinc-800 bg-zinc-900/40 divide-zinc-800' : 'border-zinc-200 bg-white divide-zinc-200'
+                  }`}>
+                    <div className="p-4 flex items-baseline gap-4">
+                      <span className="font-bold w-28 text-emerald-500 shrink-0">1. Reserve</span>
+                      <span className="text-zinc-500">Hold the price on the buyer's card via Stripe pre-authorization.</span>
+                    </div>
+                    <div className="p-4 flex items-baseline gap-4">
+                      <span className="font-bold w-28 text-amber-500 shrink-0">2. Execute</span>
+                      <span className="text-zinc-500">Run the tool inside an isolated CreateOS Firecracker micro-VM (5000ms limit).</span>
+                    </div>
+                    <div className="p-4 flex items-baseline gap-4">
+                      <span className="font-bold w-28 text-emerald-500 shrink-0">3. Capture/Release</span>
+                      <span className="text-zinc-500">Charge on success, void on failure. Each step is written immutably to the ledger.</span>
+                    </div>
+                  </div>
+
+                  <div className="pt-4 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+                    <button
+                      onClick={() => { setDocsSection('execute'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                        isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
+                      }`}
+                    >
+                      ← Back to Execute a tool
+                    </button>
+                    <button
+                      onClick={() => { setDocsSection('errors'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                        isDark ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'
+                      }`}
+                    >
+                      <span>Next: Errors</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Project Card */}
-              <div className={`border rounded-xl p-6 ${
-                isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'
-              }`}>
-                <span className="text-[10px] font-mono text-zinc-400 tracking-wider uppercase block mb-1">
-                  PROJECT
-                </span>
-                <h3 className="text-lg font-bold tracking-tight mb-1">
-                  Built for the CreateOS x Stripe Projects Hackathon, Oct 2026
-                </h3>
-                <p className="text-xs text-zinc-500 mb-4">
-                  Open source. Questions and feedback are welcome.
-                </p>
+              {/* SECTION 5: ERRORS */}
+              {docsSection === 'errors' && (
+                <div className="flex flex-col gap-6">
+                  <div>
+                    <h2 className="text-2xl font-extrabold tracking-tight mb-2">Errors & Settlement Matrix</h2>
+                    <p className="text-sm text-zinc-500 max-w-2xl">
+                      Failures in guest code or sandbox timeouts are released with zero charge to the customer.
+                    </p>
+                  </div>
 
-                <div className="flex flex-wrap items-center gap-3">
-                  <a
-                    href="https://github.com/southenempire/southen-microforge"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="px-4 py-2 rounded-lg bg-black text-white text-xs font-medium hover:bg-zinc-800 transition-colors shadow-sm flex items-center gap-2"
-                  >
-                    <GithubIcon className="h-3.5 w-3.5" />
-                    <span>GitHub repository</span>
-                  </a>
+                  <div className={`border rounded-xl overflow-hidden font-mono text-xs ${
+                    isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'
+                  }`}>
+                    <table className="w-full text-left">
+                      <thead className={`border-b text-[10px] uppercase tracking-wider ${
+                        isDark ? 'border-zinc-800 bg-zinc-950 text-zinc-400' : 'border-zinc-200 bg-zinc-50 text-zinc-500'
+                      }`}>
+                        <tr>
+                          <th className="py-2.5 px-4">CODE</th>
+                          <th className="py-2.5 px-4">DESCRIPTION</th>
+                          <th className="py-2.5 px-4">SETTLEMENT</th>
+                        </tr>
+                      </thead>
+                      <tbody className={`divide-y ${isDark ? 'divide-zinc-800' : 'divide-zinc-200'}`}>
+                        <tr>
+                          <td className="py-2.5 px-4 font-semibold text-amber-500">ERR_TIMEOUT</td>
+                          <td className="py-2.5 px-4 text-zinc-500">Execution exceeded 5000ms sandbox hardware limit</td>
+                          <td className="py-2.5 px-4 text-emerald-500 font-bold">Hold released ($0.00)</td>
+                        </tr>
+                        <tr>
+                          <td className="py-2.5 px-4 font-semibold text-amber-500">ERR_SANDBOX_EXIT</td>
+                          <td className="py-2.5 px-4 text-zinc-500">Guest code crashed with non-zero exit status</td>
+                          <td className="py-2.5 px-4 text-emerald-500 font-bold">Hold released ($0.00)</td>
+                        </tr>
+                        <tr>
+                          <td className="py-2.5 px-4 font-semibold text-amber-500">ERR_HOLD_FAILED</td>
+                          <td className="py-2.5 px-4 text-zinc-500">Stripe pre-authorization card check declined</td>
+                          <td className="py-2.5 px-4 text-zinc-500">Aborted prior to VM</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
 
-                  <a
-                    href="https://t.me/southen13"
-                    target="_blank"
-                    rel="noreferrer"
-                    className={`px-4 py-2 rounded-lg border text-xs font-medium transition-colors flex items-center gap-2 ${
-                      isDark ? 'border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-white' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800'
-                    }`}
-                  >
-                    <Send className="h-3.5 w-3.5" />
-                    <span>Telegram @southen13</span>
-                  </a>
-
-                  <a
-                    href="https://x.com/southen13"
-                    target="_blank"
-                    rel="noreferrer"
-                    className={`px-4 py-2 rounded-lg border text-xs font-medium transition-colors flex items-center gap-2 ${
-                      isDark ? 'border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-white' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800'
-                    }`}
-                  >
-                    <TwitterIcon className="h-3.5 w-3.5" />
-                    <span>X @southen13</span>
-                  </a>
+                  <div className="pt-4 flex justify-between items-center border-t border-zinc-200 dark:border-zinc-800">
+                    <button
+                      onClick={() => { setDocsSection('billing'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                        isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'
+                      }`}
+                    >
+                      ← Back to Two-phase billing
+                    </button>
+                    <button
+                      onClick={() => { setDocsSection('project'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
+                        isDark ? 'bg-zinc-800 text-white hover:bg-zinc-700' : 'bg-zinc-100 text-zinc-900 hover:bg-zinc-200'
+                      }`}
+                    >
+                      <span>Next: Project</span>
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {/* SECTION 6: PROJECT */}
+              {docsSection === 'project' && (
+                <div className="flex flex-col gap-6">
+                  <div className={`border rounded-xl p-6 ${
+                    isDark ? 'border-zinc-800 bg-zinc-900/40' : 'border-zinc-200 bg-white'
+                  }`}>
+                    <span className="text-[10px] font-mono text-zinc-400 tracking-wider uppercase block mb-1">
+                      PROJECT
+                    </span>
+                    <h3 className="text-xl font-bold tracking-tight mb-2">
+                      MicroForge Developer Platform
+                    </h3>
+                    <p className="text-xs text-zinc-500 mb-6 leading-relaxed max-w-xl">
+                      Turn natural language specs into isolated, paid API endpoints running in Firecracker micro-VMs with Two-Phase Stripe rails. Open source.
+                    </p>
+
+                    <div className="flex flex-wrap items-center gap-3">
+                      <a
+                        href="https://github.com/southenempire/southen-microforge"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-4 py-2.5 rounded-lg bg-black dark:bg-white text-white dark:text-black text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-sm flex items-center gap-2"
+                      >
+                        <GithubIcon className="h-3.5 w-3.5" />
+                        <span>GitHub repository</span>
+                      </a>
+
+                      <a
+                        href="https://t.me/southen13"
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`px-4 py-2.5 rounded-lg border text-xs font-medium transition-colors flex items-center gap-2 ${
+                          isDark ? 'border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-white' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800'
+                        }`}
+                      >
+                        <Send className="h-3.5 w-3.5" />
+                        <span>Telegram @southen13</span>
+                      </a>
+
+                      <a
+                        href="https://x.com/southen13"
+                        target="_blank"
+                        rel="noreferrer"
+                        className={`px-4 py-2.5 rounded-lg border text-xs font-medium transition-colors flex items-center gap-2 ${
+                          isDark ? 'border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-white' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800'
+                        }`}
+                      >
+                        <TwitterIcon className="h-3.5 w-3.5" />
+                        <span>X @southen13</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}

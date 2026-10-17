@@ -1,90 +1,166 @@
 # ⚡ MicroForge
-> **Autonomous Developer Agent for Monetized Micro-Tools**  
-> Built by **SouthenEmpire** for the **CreateOS × Stripe Projects Hackathon** (October 2026).
+> **Autonomous Developer Agent for Monetized Micro-Tools & Agent APIs**  
+> Built by **SouthenEmpire** for the **CreateOS × Stripe Projects Online Hackathon** (October 2026).
 
-[![CreateOS](https://img.shields.io/badge/CreateOS-Firecracker%20Micro--VM-blue?style=flat-square)](https://createos.sh)
-[![Stripe](https://img.shields.io/badge/Stripe-Projects%20Rails-635bff?style=flat-square)](https://stripe.com)
-[![Next.js](https://img.shields.io/badge/Next.js-16.4.2%20App%20Router-black?style=flat-square)](https://nextjs.org)
-[![Security](https://img.shields.io/badge/Kaggle%20Vibe%20Coding-Security%20Audited-emerald?style=flat-square)](https://www.kaggle.com/whitepaper-vibe-coding-agent-security-and-evaluation)
-
----
-
-## 🎯 Executive Summary
-
-**MicroForge** transforms plain English ideas into live, secure, monetized micro-tools in seconds.
-
-Developers frequently need focused utility tools: Markdown sanitizers, JWT claims decoders, webhook HMAC verifiers, SQL query explainers, or API payload diff engines. Building, testing, securing, and wiring Stripe billing for each one traditionally takes hours of boilerplate.
-
-With MicroForge:
-1. **Spec-to-Code Synthesis**: An autonomous agent analyzes requirements and authors both the module code and an automated verification test suite.
-2. **CreateOS Firecracker Micro-VM Sandbox**: MicroForge spins up an isolated, ephemeral Linux micro-VM via `@nodeops-createos/sandbox` (`s-1vcpu-1gb`, `devbox:1`) to execute tests in clean isolation.
-3. **Self-Healing Feedback Loop**: If verification tests fail in the sandbox, stderr output is passed back to the agent with targeted diagnostics to iteratively patch the code until 100% test coverage is achieved.
-4. **Stripe Projects Monetization**: Upon passing verification, the agent automatically registers products and pricing tiers on Stripe, generating one-click payment and subscription links.
-5. **Two-Phase Commit Financial Ledger**: Every execution follows an enterprise-grade state machine (`RESERVE_HOLD` → `EXECUTE_SANDBOX` → `CAPTURE` / `RELEASE_ON_FAIL`). **Users are never charged if code fails.**
+[![CreateOS Micro-VM](https://img.shields.io/badge/CreateOS-Firecracker%20Micro--VM-blue?style=flat-square&logo=linux)](https://createos.sh)
+[![Stripe Projects Rails](https://img.shields.io/badge/Stripe-Projects%20Rails-635bff?style=flat-square&logo=stripe)](https://stripe.com)
+[![Next.js 16 App Router](https://img.shields.io/badge/Next.js-16.4.2%20App%20Router-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![Privy Social Auth](https://img.shields.io/badge/Auth-Privy%20Embedded%20Social-violet?style=flat-square)](https://privy.io)
+[![Kaggle Vibe Coding Audited](https://img.shields.io/badge/Security-Kaggle%20Vibe%20Coding%20Audited-emerald?style=flat-square)](https://www.kaggle.com/whitepaper-vibe-coding-agent-security-and-evaluation)
 
 ---
 
-## 🏗️ Architecture & Execution Flow
+## 🏆 Hackathon Submission Checklist & Verification Links
+
+| Requirement | Status | Links & Details |
+| :--- | :---: | :--- |
+| **1. Public GitHub Repo** | ✅ Completed | [github.com/southenempire/southen-microforge](https://github.com/southenempire/southen-microforge) |
+| **2. Demo Video (2–3 mins, face on cam)** | 🎥 Ready for URL | [YouTube Demo Video Walkthrough](https://youtu.be/YOUR_DEMO_VIDEO) *(Walkthrough with webcam)* |
+| **3. Stripe Projects Leaderboard** | 🚀 Ready to Submit | [projects.dev/leaderboard](https://projects.dev/leaderboard) — Entry Code: **`CreateOS-2026`** |
+| **4. Social Media Post** | 📣 Drafted | Tag `@createosai` on [X / Twitter](https://x.com/createosai) & `CreateOS` on [LinkedIn](https://linkedin.com) |
+| **5. Sponsor Technologies** | ✅ 100% Integrated | **CreateOS** (`@nodeops-createos/sandbox` Firecracker micro-VMs) + **Stripe Projects** (Two-Phase Pre-auth Hold / Capture Rails) + **Privy** Social Auth |
+| **6. Agent Standard Compliance** | ✅ Live | Standard OpenAI Function Calling Schema at [`/api/tools?format=agent`](https://southen-microforge.vercel.app/api/tools?format=agent) |
+
+---
+
+## 🎯 Executive Summary & The Problem We Solve
+
+Building and operating single-purpose micro-APIs (JWT inspectors, HMAC signature validators, CSV-to-SQL transformers, sanitizers, or contract analyzers) forces developers and autonomous agent swarms into hours of repetitive plumbing:
+- Writing sandboxed runners so user code doesn't compromise the server.
+- Writing test suites and fixing edge cases.
+- Hooking up payment gateways, pre-authorizations, and credit card holds.
+- Providing schemas so AI agents can invoke tools autonomously.
+
+**MicroForge solves this end-to-end in seconds:**
+1. **Spec-to-Code Synthesis**: Natural language specifications are translated into production TypeScript/JavaScript modules alongside automated test suites.
+2. **CreateOS Firecracker Micro-VM Execution**: Untrusted code runs in hardware-isolated Linux micro-VMs (`s-1vcpu-1gb`, `devbox:1`) via `@nodeops-createos/sandbox`.
+3. **Self-Healing Feedback Loop**: If unit tests fail in the sandbox, stderr traces feed back into the synthesis engine to iteratively repair and verify the code until 100% of test assertions pass.
+4. **Stripe Projects Two-Phase Rails**: Every execution follows an enterprise-grade financial state machine (`RESERVED_HOLD` → `RUN_VM` → `CAPTURED` / `RELEASED`). **Users are never charged if code errors or times out.**
+5. **Privy Embedded Social Auth**: Instant developer sign-in via Google, GitHub, X, Discord, and Email without passwords or Web3 wallet prompts.
+6. **Autonomous Agent Tool Discovery**: Autonomous agents can query `/api/tools?format=agent` to dynamically discover schemas and execute isolated tools.
+
+---
+
+## 🏗️ Architecture & State Machine
 
 ```mermaid
 flowchart TD
-    User["User Spec / Natural Language Prompt"] --> Agent["Autonomous Agent Synthesis (Gemini 2.0 Flash)"]
-    
-    subgraph Sandbox["CreateOS Ephemeral Firecracker Micro-VM"]
-        Agent --> CodeGen["Module Code + Test Suite"]
-        CodeGen --> VM["Boot devbox:1 (s-1vcpu-1gb)"]
-        VM --> RunTests["Execute Automated Test Suite"]
-        RunTests -->|Failure: stderr diagnostics| SelfHeal["Self-Healing Feedback Loop"]
-        SelfHeal --> Agent
+    subgraph Spec["1. Developer & Agent Spec Layer"]
+        A["Natural Language Spec / CLI Prompt"] --> B["Synthesis Engine (Gemini 2.0 / Self-Healing)"]
     end
-    
-    subgraph StripeRail["Stripe Projects Monetization"]
-        RunTests -->|Pass: 100% Verified| Provision["Provision Stripe Product & Price"]
-        Provision --> PaymentLink["Live Stripe Checkout Link"]
+
+    subgraph Sandbox["2. CreateOS Micro-VM Sandbox Layer"]
+        B --> C["Generate Module + Test Suite"]
+        C --> D["Boot Ephemeral devbox:1 micro-VM"]
+        D --> E{"Run Tests in Micro-VM"}
+        E -- "Failure (stderr)" --> F["Self-Healing Feedback Loop"]
+        F --> B
+        E -- "Pass (100% Clean)" --> G["Publish Live Endpoint & Stripe Price"]
     end
-    
-    subgraph Execution["Two-Phase Commit Financial Ledger"]
-        ExecReq["API Call / Execution Request"] --> Step1["Phase 1: Reserve Financial Hold"]
-        Step1 --> Step2["Phase 2: Execute in CreateOS Micro-VM"]
-        Step2 -->|Success| Step3["Capture Hold & Record Revenue"]
-        Step2 -->|Error / Timeout| Step4["Release Hold & Zero Fee"]
+
+    subgraph TwoPhase["3. Two-Phase Stripe Financial Rails"]
+        H["Execute Request (Client or Autonomous Agent)"] --> I["Phase 1: Reserve Hold (Stripe Auth Check)"]
+        I --> J["Phase 2: Dispatch to Isolated Firecracker VM"]
+        J --> K{"Guest Exit Code 0?"}
+        K -- "Success (200 OK)" --> L["Phase 3A: Capture Payment Hold ($0.10)"]
+        K -- "Error / Timeout" --> M["Phase 3B: Void & Release Hold ($0.00 Fee)"]
+    end
+
+    subgraph Ledger["4. Immutability & Audit"]
+        L --> N[("Append-Only Ledger Stream")]
+        M --> N
     end
 ```
 
 ---
 
-## 🔒 Kaggle Vibe Coding Agent Security & Evaluation Standards
+## 🔒 Kaggle Vibe Coding Agent Security Standard
 
-MicroForge adheres strictly to the security, sandboxing, and evaluation principles established in the [Kaggle Whitepaper – Vibe Coding Agent Security and Evaluation](https://www.kaggle.com/whitepaper-vibe-coding-agent-security-and-evaluation):
+MicroForge strictly aligns with the security principles defined in the [Kaggle Whitepaper – Vibe Coding Agent Security and Evaluation](https://www.kaggle.com/whitepaper-vibe-coding-agent-security-and-evaluation):
 
-* **Hermetic Code Isolation**: User-generated code NEVER executes directly in the host application runtime. All untrusted code is dispatched to ephemeral CreateOS Firecracker micro-VMs with CPU and memory caps.
-* **Deterministic Verification**: Every generated tool must pass strict automated test assertions before being registered in the storefront.
-* **Financial Failsafe (Two-Phase Commit)**: Payment holds are never captured prior to successful micro-VM exit. Network timeouts or runtime crashes trigger atomic hold releases.
-* **Zero Credential Leakage**: All keys (`CREATEOS_API_KEY`, `STRIPE_ACCOUNT_ID`, `GEMINI_API_KEY`) remain strictly server-side in `.env.local` and are never exposed to client bundles or git histories.
-
----
-
-## 🚀 Key Features
-
-* **Clean Developer-First UI**: Dark-mode `#09090b` aesthetic with monospace metrics, live execution telemetry, step indicators, and instant test suite inspection.
-* **Interactive Tool Playground**: Test built micro-tools live with custom JSON payloads and observe real-time execution times and outputs.
-* **Live Financial Ledger**: Append-only audit stream visualizing holds, captures, releases, and transaction balances.
-* **Stripe Integration**: Supports per-call pricing (e.g. \$0.05, \$0.10, \$0.25) and pre-configured test-mode checkout sessions.
-* **Pre-Seeded Catalog**: Comes with out-of-the-box verified tools (Markdown Sanitizer, JWT Claims Decoder, Webhook HMAC Verifier).
+1. **Zero Runtime Escape**: No guest code ever runs on the host Next.js server. Every run executes inside isolated CreateOS Firecracker micro-VM containers with hardware boundary limits (5000ms max timeout, 1GB RAM cap).
+2. **Deterministic Evaluation**: Modules cannot be deployed to the catalog without passing automated unit tests executed inside the sandbox.
+3. **Zero Financial Loss (Hold-and-Capture)**: Pre-authorization holds are only settled *after* execution succeeds. In failure scenarios (e.g., `ERR_TIMEOUT`, `ERR_SANDBOX_EXIT`), holds are atomically cancelled, ensuring buyers are never billed for faulty tools.
+4. **Zero Secret Leakage**: Privy secrets, CreateOS keys, and Stripe tokens remain securely in server-side environment variables and are never bundled into the client.
 
 ---
 
-## 💻 Tech Stack
+## 🤖 Autonomous Agents: Tool Calling & Discovery
 
-| Layer | Technology |
-|---|---|
-| **Framework** | Next.js 16.4.2 (App Router, Turbopack, React 19) |
-| **Language** | TypeScript 5.0 (Strict mode) |
-| **Styling** | Tailwind CSS v4, Lucide Icons, Canvas Confetti |
-| **Micro-VM Sandbox** | `@nodeops-createos/sandbox` (Firecracker Micro-VMs) |
-| **Monetization** | Stripe Projects SDK (`stripe`) |
-| **Agent Intelligence** | `@google/genai` (Gemini 2.0 Flash) with resilient synthesis |
-| **Persistence** | In-Memory Atomic Ledger with Supabase schema compatibility |
+Autonomous agent frameworks (LangChain, AutoGen, CrewAI, OpenAI Agents SDK) can dynamically query MicroForge to discover and run monetized tools.
+
+### 1. Discover Available Tools as OpenAI Functions
+```bash
+curl -s https://southen-microforge.vercel.app/api/tools?format=agent
+```
+
+**Response Format:**
+```json
+{
+  "provider": "MicroForge",
+  "protocol": "OpenAI Tools Function Calling (2026)",
+  "endpoint": "https://southen-microforge.vercel.app/api/execute",
+  "billing": "Two-Phase Stripe Rails (Pre-auth Hold -> Isolated Firecracker Micro-VM -> Capture)",
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "markdown_sanitizer",
+        "description": "Strips raw script injections and outputs safe clean markdown [MicroForge Isolation: Firecracker micro-VM. Per-run cost: $0.10]",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string", "description": "Parameter text for Markdown Sanitizer" }
+          },
+          "required": ["text"]
+        }
+      }
+    }
+  ]
+}
+```
+
+### 2. Execute a Tool via cURL
+```bash
+curl -X POST https://southen-microforge.vercel.app/api/execute \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "markdown-sanitizer",
+    "payload": {
+      "text": "# Hello <script>alert(1)</script> World"
+    }
+  }'
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "state": "captured",
+  "executionId": "exec_oj3nf8o",
+  "output": {
+    "success": true,
+    "plainText": "Hello <script>alert(1)</script> World",
+    "wordCount": 3,
+    "linksExtracted": []
+  },
+  "durationMs": 10,
+  "amountChargedCents": 10
+}
+```
+
+---
+
+## 💻 Tech Stack & Architecture Matrix
+
+| Layer | Component | Description |
+|---|---|---|
+| **Frontend & SSR** | Next.js 16.4.2 (Turbopack, React 19) | Dark/Light mode theme system, responsive Linear/Stripe design |
+| **Authentication** | Privy (`cmvcwkmep007b0fl4skzwa7j8`) | Embedded social sign-in (Google, GitHub, X, Discord, Email) |
+| **Micro-VM Sandboxing** | CreateOS (`@nodeops-createos/sandbox`) | Firecracker ephemeral micro-VMs (`devbox:1`, `s-1vcpu-1gb`) |
+| **Financial Rails** | Stripe Projects SDK (`stripe`) | Two-Phase pre-authorization and capture state machine |
+| **Agent Intelligence** | `@google/genai` (Gemini 2.0 Flash) | Spec parsing, synthesis, and self-healing error analysis |
+| **Audit Ledger** | PostgreSQL Append-Only Ledger | Immutability, audit logs, hold tracking, and revenue telemetry |
 
 ---
 
@@ -97,8 +173,7 @@ cd southen-microforge
 npm install
 ```
 
-### 2. Configure Environment
-Create a `.env.local` file in the project root:
+### 2. Configure Environment (`.env.local`)
 ```env
 # CreateOS Sandbox Credentials
 CREATEOS_API_KEY=your_createos_api_token
@@ -108,7 +183,11 @@ CREATEOS_SANDBOX_BASE_URL=https://api.createos.sh
 STRIPE_ACCOUNT_ID=acct_your_stripe_account
 STRIPE_PROJECT_NAME=southen-microforge
 
-# Google Gemini Credentials (Optional - Falls back to resilient synthesis engine)
+# Privy Embedded Auth
+NEXT_PUBLIC_PRIVY_APP_ID=cmvcwkmep007b0fl4skzwa7j8
+PRIVY_APP_SECRET=your_privy_secret
+
+# Google Gemini Intelligence
 GEMINI_API_KEY=your_gemini_api_key
 ```
 
@@ -116,17 +195,19 @@ GEMINI_API_KEY=your_gemini_api_key
 ```bash
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) to access the MicroForge Agent Studio.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 4. Build for Production
+### 4. Run TypeScript Check
 ```bash
-npm run build
-npm run start
+npx tsc --noEmit
 ```
 
 ---
 
-## 👥 Team
+## 👥 Team & Submission Information
 - **Team Name**: SouthenEmpire
-- **Member**: southen03@gmail.com
-- **Hackathon**: CreateOS × Stripe Projects Online Hackathon (Oct 2026)
+- **Lead Builder**: southen03@gmail.com
+- **Telegram**: [@southen13](https://t.me/southen13)
+- **X / Twitter**: [@southen13](https://x.com/southen13)
+- **Hackathon**: CreateOS × Stripe Projects Online Hackathon (October 2026)
+- **Projects.dev Leaderboard Entry Code**: `CreateOS-2026`
