@@ -1701,39 +1701,42 @@ curl -X POST "https://southen-microforge.vercel.app/api/execute?slug=markdown-sa
                       Turn natural language specs into isolated, paid API endpoints running in Firecracker micro-VMs with Two-Phase Stripe rails. Open source.
                     </p>
 
-                    <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center gap-2.5">
                       <a
                         href="https://github.com/southenempire/southen-microforge"
                         target="_blank"
                         rel="noreferrer"
-                        className="px-4 py-2.5 rounded-lg bg-black dark:bg-white text-white dark:text-black text-xs font-medium hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-sm flex items-center gap-2"
+                        title="GitHub repository"
+                        aria-label="GitHub repository"
+                        className="p-2.5 rounded-lg bg-black dark:bg-white text-white dark:text-black hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-colors shadow-sm flex items-center justify-center"
                       >
-                        <GithubIcon className="h-3.5 w-3.5" />
-                        <span>GitHub repository</span>
+                        <GithubIcon className="h-4 w-4" />
                       </a>
 
                       <a
                         href="https://t.me/southen13"
                         target="_blank"
                         rel="noreferrer"
-                        className={`px-4 py-2.5 rounded-lg border text-xs font-medium transition-colors flex items-center gap-2 ${
+                        title="Telegram @southen13"
+                        aria-label="Telegram @southen13"
+                        className={`p-2.5 rounded-lg border transition-colors flex items-center justify-center ${
                           isDark ? 'border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-white' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800'
                         }`}
                       >
-                        <Send className="h-3.5 w-3.5" />
-                        <span>Telegram @southen13</span>
+                        <Send className="h-4 w-4" />
                       </a>
 
                       <a
                         href="https://x.com/southen13"
                         target="_blank"
                         rel="noreferrer"
-                        className={`px-4 py-2.5 rounded-lg border text-xs font-medium transition-colors flex items-center gap-2 ${
+                        title="X @southen13"
+                        aria-label="X @southen13"
+                        className={`p-2.5 rounded-lg border transition-colors flex items-center justify-center ${
                           isDark ? 'border-zinc-700 bg-zinc-800 hover:bg-zinc-700 text-white' : 'border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-800'
                         }`}
                       >
-                        <TwitterIcon className="h-3.5 w-3.5" />
-                        <span>X @southen13</span>
+                        <TwitterIcon className="h-4 w-4" />
                       </a>
                     </div>
                   </div>
