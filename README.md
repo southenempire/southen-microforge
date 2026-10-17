@@ -1,5 +1,5 @@
-# ⚡ MicroForge
-> **Autonomous Developer Agent for Monetized Micro-Tools & Agent APIs**  
+# MicroForge
+> **Autonomous Developer Platform for Monetized Micro-Tools & Agent APIs**  
 > Turn plain-English specifications into hardware-isolated, monetized APIs running in CreateOS Firecracker micro-VMs with Two-Phase Stripe rails and Supabase append-only ledgers.
 
 [![CreateOS Micro-VM](https://img.shields.io/badge/CreateOS-Firecracker%20Micro--VM-blue?style=flat-square&logo=linux)](https://createos.sh)
@@ -11,7 +11,7 @@
 
 ---
 
-## 🎯 What is MicroForge?
+## Overview
 
 Building and operating single-purpose utility APIs (JWT inspectors, HMAC signature validators, CSV-to-SQL batch converters, Markdown sanitizers, or contract analyzers) traditionally forces developers and autonomous agent swarms into hours of repetitive infrastructure work:
 - Authoring sandboxed runners so untrusted guest code cannot compromise the host.
@@ -31,7 +31,7 @@ Building and operating single-purpose utility APIs (JWT inspectors, HMAC signatu
 
 ---
 
-## 🏗️ Architecture & State Machine
+## Architecture & State Machine
 
 ```mermaid
 flowchart TD
@@ -64,7 +64,7 @@ flowchart TD
 
 ---
 
-## 🔒 Kaggle Vibe Coding Agent Security Standard
+## Kaggle Vibe Coding Agent Security Standard
 
 MicroForge strictly aligns with the security principles defined in the [Kaggle Whitepaper – Vibe Coding Agent Security and Evaluation](https://www.kaggle.com/whitepaper-vibe-coding-agent-security-and-evaluation):
 
@@ -75,7 +75,7 @@ MicroForge strictly aligns with the security principles defined in the [Kaggle W
 
 ---
 
-## 🤖 Autonomous Agents: Tool Calling & Discovery
+## Autonomous Agents: Tool Calling & Discovery
 
 Autonomous agent frameworks (LangChain, AutoGen, CrewAI, OpenAI Agents SDK) can dynamically query MicroForge to discover and run monetized tools.
 
@@ -141,7 +141,7 @@ curl -X POST https://southen-microforge.vercel.app/api/execute \
 
 ---
 
-## 🗄️ Supabase PostgreSQL Ledger Setup
+## Supabase PostgreSQL Ledger Setup
 
 MicroForge includes full Supabase compatibility out of the box.
 
@@ -157,7 +157,7 @@ MicroForge includes full Supabase compatibility out of the box.
 
 ---
 
-## 💻 Tech Stack & Architecture Matrix
+## Tech Stack & Architecture Matrix
 
 | Layer | Component | Description |
 |---|---|---|
@@ -170,7 +170,7 @@ MicroForge includes full Supabase compatibility out of the box.
 
 ---
 
-## 🛠️ Local Development Setup
+## Local Development Setup
 
 ### 1. Clone & Install
 ```bash
@@ -214,7 +214,7 @@ npx tsc --noEmit
 
 ---
 
-## 👥 Community & Contact
+## Community & Contact
 - **Organization**: SouthenEmpire
 - **GitHub**: [github.com/southenempire/southen-microforge](https://github.com/southenempire/southen-microforge)
 - **Telegram**: [@southen13](https://t.me/southen13)
