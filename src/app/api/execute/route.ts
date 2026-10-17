@@ -5,12 +5,24 @@ import vm from 'vm';
 
 export async function POST(req: Request) {
   try {
-    const { toolId, inputPayload } = await req.json();
+    const url = new URL(req.url);
+    const querySlug = url.searchParams.get('slug');
+    const body = await req.json().catch(() => ({}));
 
-    const tool = store.getTool(toolId);
+    const toolId = body.toolId;
+    const toolSlug = querySlug || body.slug;
+
+    const tool = toolId 
+      ? store.getTool(toolId) 
+      : (toolSlug ? store.getTools().find((t: any) => t.slug === toolSlug) : null);
+
     if (!tool) {
       return NextResponse.json({ error: 'Micro-tool not found' }, { status: 404 });
     }
+
+    const inputPayload = body.inputPayload !== undefined 
+      ? body.inputPayload 
+      : (querySlug ? body : (body.payload || {}));
 
     const executionId = `exec_${Math.random().toString(36).substring(2, 9)}`;
 
