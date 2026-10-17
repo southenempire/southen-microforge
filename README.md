@@ -1,43 +1,33 @@
 # ⚡ MicroForge
 > **Autonomous Developer Agent for Monetized Micro-Tools & Agent APIs**  
-> Built by **SouthenEmpire** for the **CreateOS × Stripe Projects Online Hackathon** (October 2026).
+> Turn plain-English specifications into hardware-isolated, monetized APIs running in CreateOS Firecracker micro-VMs with Two-Phase Stripe rails and Supabase append-only ledgers.
 
 [![CreateOS Micro-VM](https://img.shields.io/badge/CreateOS-Firecracker%20Micro--VM-blue?style=flat-square&logo=linux)](https://createos.sh)
 [![Stripe Projects Rails](https://img.shields.io/badge/Stripe-Projects%20Rails-635bff?style=flat-square&logo=stripe)](https://stripe.com)
-[![Next.js 16 App Router](https://img.shields.io/badge/Next.js-16.4.2%20App%20Router-black?style=flat-square&logo=next.js)](https://nextjs.org)
+[![Supabase Ledger](https://img.shields.io/badge/Supabase-Append--Only%20Postgres-3ecf8e?style=flat-square&logo=supabase)](https://supabase.com)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.4.2%20App%20Router-black?style=flat-square&logo=next.js)](https://nextjs.org)
 [![Privy Social Auth](https://img.shields.io/badge/Auth-Privy%20Embedded%20Social-violet?style=flat-square)](https://privy.io)
 [![Kaggle Vibe Coding Audited](https://img.shields.io/badge/Security-Kaggle%20Vibe%20Coding%20Audited-emerald?style=flat-square)](https://www.kaggle.com/whitepaper-vibe-coding-agent-security-and-evaluation)
 
 ---
 
-## 🏆 Hackathon Submission Checklist & Verification Links
+## 🎯 What is MicroForge?
 
-| Requirement | Status | Links & Details |
-| :--- | :---: | :--- |
-| **1. Public GitHub Repo** | ✅ Completed | [github.com/southenempire/southen-microforge](https://github.com/southenempire/southen-microforge) |
-| **2. Demo Video (2–3 mins, face on cam)** | 🎥 Ready for URL | [YouTube Demo Video Walkthrough](https://youtu.be/YOUR_DEMO_VIDEO) *(Walkthrough with webcam)* |
-| **3. Stripe Projects Leaderboard** | 🚀 Ready to Submit | [projects.dev/leaderboard](https://projects.dev/leaderboard) — Entry Code: **`CreateOS-2026`** |
-| **4. Social Media Post** | 📣 Drafted | Tag `@createosai` on [X / Twitter](https://x.com/createosai) & `CreateOS` on [LinkedIn](https://linkedin.com) |
-| **5. Sponsor Technologies** | ✅ 100% Integrated | **CreateOS** (`@nodeops-createos/sandbox` Firecracker micro-VMs) + **Stripe Projects** (Two-Phase Pre-auth Hold / Capture Rails) + **Privy** Social Auth |
-| **6. Agent Standard Compliance** | ✅ Live | Standard OpenAI Function Calling Schema at [`/api/tools?format=agent`](https://southen-microforge.vercel.app/api/tools?format=agent) |
-
----
-
-## 🎯 Executive Summary & The Problem We Solve
-
-Building and operating single-purpose micro-APIs (JWT inspectors, HMAC signature validators, CSV-to-SQL transformers, sanitizers, or contract analyzers) forces developers and autonomous agent swarms into hours of repetitive plumbing:
-- Writing sandboxed runners so user code doesn't compromise the server.
-- Writing test suites and fixing edge cases.
-- Hooking up payment gateways, pre-authorizations, and credit card holds.
-- Providing schemas so AI agents can invoke tools autonomously.
+Building and operating single-purpose utility APIs (JWT inspectors, HMAC signature validators, CSV-to-SQL batch converters, Markdown sanitizers, or contract analyzers) traditionally forces developers and autonomous agent swarms into hours of repetitive infrastructure work:
+- Authoring sandboxed runners so untrusted guest code cannot compromise the host.
+- Writing test suites and debugging edge cases.
+- Wiring Stripe billing, pre-authorizations, and credit card holds.
+- Structuring function-calling schemas so LLM agents can discover and invoke tools.
+- Maintaining audit logs of every execution and billing event.
 
 **MicroForge solves this end-to-end in seconds:**
 1. **Spec-to-Code Synthesis**: Natural language specifications are translated into production TypeScript/JavaScript modules alongside automated test suites.
-2. **CreateOS Firecracker Micro-VM Execution**: Untrusted code runs in hardware-isolated Linux micro-VMs (`s-1vcpu-1gb`, `devbox:1`) via `@nodeops-createos/sandbox`.
+2. **CreateOS Firecracker Micro-VM Execution**: Untrusted code executes in hardware-isolated Linux micro-VMs (`s-1vcpu-1gb`, `devbox:1`) via `@nodeops-createos/sandbox`.
 3. **Self-Healing Feedback Loop**: If unit tests fail in the sandbox, stderr traces feed back into the synthesis engine to iteratively repair and verify the code until 100% of test assertions pass.
-4. **Stripe Projects Two-Phase Rails**: Every execution follows an enterprise-grade financial state machine (`RESERVED_HOLD` → `RUN_VM` → `CAPTURED` / `RELEASED`). **Users are never charged if code errors or times out.**
-5. **Privy Embedded Social Auth**: Instant developer sign-in via Google, GitHub, X, Discord, and Email without passwords or Web3 wallet prompts.
-6. **Autonomous Agent Tool Discovery**: Autonomous agents can query `/api/tools?format=agent` to dynamically discover schemas and execute isolated tools.
+4. **Two-Phase Stripe Rails**: Every execution follows an enterprise-grade financial state machine (`RESERVED_HOLD` → `RUN_VM` → `CAPTURED` / `RELEASED`). **Users are never charged if code errors or times out.**
+5. **Supabase Append-Only Ledger**: Every authorization hold, capture, and release is immutably written to a PostgreSQL ledger with database-level update/delete prevention triggers.
+6. **Privy Embedded Social Auth**: Instant developer sign-in via Google, GitHub, X, Discord, and Email without passwords or Web3 wallet prompts.
+7. **Autonomous Agent Tool Discovery**: Autonomous agents query `/api/tools?format=agent` to dynamically discover schemas and execute isolated tools.
 
 ---
 
@@ -46,7 +36,7 @@ Building and operating single-purpose micro-APIs (JWT inspectors, HMAC signature
 ```mermaid
 flowchart TD
     subgraph Spec["1. Developer & Agent Spec Layer"]
-        A["Natural Language Spec / CLI Prompt"] --> B["Synthesis Engine (Gemini 2.0 / Self-Healing)"]
+        A["Natural Language Spec / API Prompt"] --> B["Synthesis Engine (Gemini 2.0 / Self-Healing)"]
     end
 
     subgraph Sandbox["2. CreateOS Micro-VM Sandbox Layer"]
@@ -66,8 +56,8 @@ flowchart TD
         K -- "Error / Timeout" --> M["Phase 3B: Void & Release Hold ($0.00 Fee)"]
     end
 
-    subgraph Ledger["4. Immutability & Audit"]
-        L --> N[("Append-Only Ledger Stream")]
+    subgraph Ledger["4. Supabase Append-Only Ledger"]
+        L --> N[("PostgreSQL Ledger Stream")]
         M --> N
     end
 ```
@@ -151,6 +141,22 @@ curl -X POST https://southen-microforge.vercel.app/api/execute \
 
 ---
 
+## 🗄️ Supabase PostgreSQL Ledger Setup
+
+MicroForge includes full Supabase compatibility out of the box.
+
+1. Create a project in [Supabase](https://supabase.com).
+2. Open the **SQL Editor** and execute the migration file:
+   [`supabase/migrations/20261017_init_microforge.sql`](./supabase/migrations/20261017_init_microforge.sql)
+3. Add your Supabase credentials to `.env.local`:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+   ```
+4. All tool executions and Two-Phase ledger transactions will automatically mirror to your PostgreSQL instance with trigger-level immutability.
+
+---
+
 ## 💻 Tech Stack & Architecture Matrix
 
 | Layer | Component | Description |
@@ -160,7 +166,7 @@ curl -X POST https://southen-microforge.vercel.app/api/execute \
 | **Micro-VM Sandboxing** | CreateOS (`@nodeops-createos/sandbox`) | Firecracker ephemeral micro-VMs (`devbox:1`, `s-1vcpu-1gb`) |
 | **Financial Rails** | Stripe Projects SDK (`stripe`) | Two-Phase pre-authorization and capture state machine |
 | **Agent Intelligence** | `@google/genai` (Gemini 2.0 Flash) | Spec parsing, synthesis, and self-healing error analysis |
-| **Audit Ledger** | PostgreSQL Append-Only Ledger | Immutability, audit logs, hold tracking, and revenue telemetry |
+| **Audit Ledger** | PostgreSQL / Supabase Append-Only Ledger | Immutability, audit logs, hold tracking, and revenue telemetry |
 
 ---
 
@@ -177,7 +183,7 @@ npm install
 ```env
 # CreateOS Sandbox Credentials
 CREATEOS_API_KEY=your_createos_api_token
-CREATEOS_SANDBOX_BASE_URL=https://api.createos.sh
+CREATEOS_SANDBOX_BASE_URL=https://api.sb.createos.sh
 
 # Stripe Projects Credentials
 STRIPE_ACCOUNT_ID=acct_your_stripe_account
@@ -186,6 +192,10 @@ STRIPE_PROJECT_NAME=southen-microforge
 # Privy Embedded Auth
 NEXT_PUBLIC_PRIVY_APP_ID=cmvcwkmep007b0fl4skzwa7j8
 PRIVY_APP_SECRET=your_privy_secret
+
+# Supabase PostgreSQL Ledger (Optional - falls back to resilient in-memory ledger)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
 # Google Gemini Intelligence
 GEMINI_API_KEY=your_gemini_api_key
@@ -204,10 +214,9 @@ npx tsc --noEmit
 
 ---
 
-## 👥 Team & Submission Information
-- **Team Name**: SouthenEmpire
-- **Lead Builder**: southen03@gmail.com
+## 👥 Community & Contact
+- **Organization**: SouthenEmpire
+- **GitHub**: [github.com/southenempire/southen-microforge](https://github.com/southenempire/southen-microforge)
 - **Telegram**: [@southen13](https://t.me/southen13)
 - **X / Twitter**: [@southen13](https://x.com/southen13)
-- **Hackathon**: CreateOS × Stripe Projects Online Hackathon (October 2026)
-- **Projects.dev Leaderboard Entry Code**: `CreateOS-2026`
+- **Lead Developer**: southen03@gmail.com

@@ -12,9 +12,9 @@ export async function GET() {
     executions,
     stats: {
       totalEntries: ledger.length,
-      totalCaptured: ledger.filter(e => e.entryType === 'PAYMENT_CAPTURED').length,
-      totalReleased: ledger.filter(e => e.entryType === 'HOLD_RELEASED').length,
-      totalReserved: ledger.filter(e => e.entryType === 'HOLD_RESERVED').length,
+      totalCaptured: ledger.filter((e: any) => e.entryType === 'PAYMENT_CAPTURED').length,
+      totalReleased: ledger.filter((e: any) => e.entryType === 'HOLD_RELEASED').length,
+      totalReserved: ledger.filter((e: any) => e.entryType === 'HOLD_RESERVED').length,
       revenueEarnedCents: tools.reduce((acc: number, t: any) => acc + (t.revenueEarnedCents || 0), 0)
     }
   });

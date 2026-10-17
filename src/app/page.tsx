@@ -295,10 +295,10 @@ export default function Home() {
                 <span className="font-bold text-base tracking-tight">MicroForge</span>
               </div>
 
-              <nav className="hidden sm:flex items-center gap-6 text-xs text-zinc-500 font-medium">
-                <a href="#how-it-works" className="hover:text-black dark:hover:text-white transition-colors">How it works</a>
-                <a href="#why-safe" className="hover:text-black dark:hover:text-white transition-colors">Billing</a>
-                <button onClick={() => { setViewMode('app'); setAppTab('docs'); }} className="hover:text-black dark:hover:text-white transition-colors">Docs</button>
+              <nav className="hidden sm:flex items-center gap-6 text-xs font-medium">
+                <a href="#how-it-works" className={`${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'} transition-colors`}>How it works</a>
+                <a href="#why-safe" className={`${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'} transition-colors`}>Billing</a>
+                <button onClick={() => { setViewMode('app'); setAppTab('docs'); }} className={`${isDark ? 'text-zinc-400 hover:text-white' : 'text-zinc-600 hover:text-black'} transition-colors`}>Docs</button>
               </nav>
             </div>
 
@@ -495,7 +495,7 @@ export default function Home() {
           isDark ? 'border-zinc-800' : 'border-zinc-200'
         }`}>
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>MicroForge. Built for the CreateOS x Stripe Projects Hackathon.</div>
+            <div>MicroForge. Autonomous Developer Agent for Monetized Micro-Tools & Agent APIs.</div>
             <div className="flex items-center gap-6">
               <a href="https://github.com/southenempire/southen-microforge" target="_blank" rel="noreferrer" className="hover:underline">GitHub</a>
               <a href="https://t.me/southen13" target="_blank" rel="noreferrer" className="hover:underline">Telegram</a>
