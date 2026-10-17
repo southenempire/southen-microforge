@@ -30,16 +30,20 @@ export interface SandboxExecutionResult {
 let activeSandboxId = 'sb-01m561fxede82rstkd4192t7m7';
 
 async function getOrCreateActiveSandbox(): Promise<string> {
-  // Check if current sandbox is running
-  if (activeSandboxId) {
-    try {
-      const { stdout } = await runCreateOs('createos sandbox list --quiet');
-      if (stdout.includes(activeSandboxId)) {
-        return activeSandboxId;
-      }
-    } catch (e) {
-      // ignore
+  // Check if current sandbox is running or in account
+  try {
+    const { stdout } = await runCreateOs('createos sandbox list --quiet');
+    if (activeSandboxId && stdout.includes(activeSandboxId)) {
+      return activeSandboxId;
     }
+    // Discover any existing sandbox in user account
+    const lines = stdout.trim().split('\n').map(l => l.trim()).filter(l => l.startsWith('sb-'));
+    if (lines.length > 0) {
+      activeSandboxId = lines[0].split(/\s+/)[0];
+      return activeSandboxId;
+    }
+  } catch (e) {
+    // ignore
   }
 
   // Create a fresh CreateOS Firecracker micro-VM
@@ -54,7 +58,7 @@ async function getOrCreateActiveSandbox(): Promise<string> {
     console.warn('[CreateOS Sandbox] Error creating sandbox via CLI:', err);
   }
 
-  return activeSandboxId || 'sb-01m5602eqtye91wfs96kvyn6ed';
+  return activeSandboxId || 'sb-01m561fxede82rstkd4192t7m7';
 }
 
 /**

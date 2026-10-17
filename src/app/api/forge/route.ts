@@ -44,6 +44,17 @@ export async function POST(req: Request) {
       steps[steps.length - 1].detail = `Passed in ${sandboxResult.durationMs}ms in Firecracker Micro-VM (${sandboxResult.sandboxId || 'microvm-active'})`;
     }
 
+    // Guard: Enforce Deterministic Evaluation - Never publish tools that fail verification tests
+    if (!sandboxResult.success) {
+      addStep('deploy', 'Tool deployment rejected: Failed micro-VM verification', 'failed', 'Prevented unverified code from entering public catalog');
+      return NextResponse.json({
+        success: false,
+        error: `Tool failed micro-VM verification: ${sandboxResult.stderr.slice(0, 200) || 'Assertions failed'}`,
+        steps,
+        sandboxResult
+      }, { status: 422 });
+    }
+
     // Step 4: Stripe Billing Rails Provisioning
     addStep('stripe', 'Provisioning Stripe billing rails & payment links', 'running', 'Connecting to Stripe Projects sandbox...');
     const stripeRails = await provisionStripeRails(spec.name, spec.slug, priceCents);

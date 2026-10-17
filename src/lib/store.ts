@@ -1,5 +1,4 @@
 import { MicroTool, ExecutionRun, LedgerEntry } from './types';
-import { syncExecutionToSupabase, syncLedgerToSupabase } from './supabase';
 
 // In-Memory Database store with pre-populated demo data and dynamic additions
 class MicroForgeStore {
@@ -173,7 +172,6 @@ console.log('ALL TESTS PASSED GREEN');`
 
   addLedgerEntry(entry: LedgerEntry) {
     this.ledger.push(entry);
-    syncLedgerToSupabase(entry).catch(() => {});
   }
 
   getExecutions(): ExecutionRun[] {
@@ -182,7 +180,6 @@ console.log('ALL TESTS PASSED GREEN');`
 
   addExecution(exec: ExecutionRun) {
     this.executions.push(exec);
-    syncExecutionToSupabase(exec).catch(() => {});
     const tool = this.tools.get(exec.toolId);
     if (tool && exec.state === 'captured') {
       tool.totalRuns += 1;
