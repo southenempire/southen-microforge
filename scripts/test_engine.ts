@@ -111,9 +111,9 @@ async function runTestSuite() {
     });
 
     console.log(`Releasing/voiding Stripe hold ${holdB.holdId}...`);
-    const releaseB = await releaseExecutionHold(holdB.holdId);
-    assertTest('Stripe hold released with status=released', releaseB.status === 'released' || releaseB.status === 'canceled', {
-      holdId: releaseB.holdId,
+    const releaseB = await releaseExecutionHold(holdB.holdId, 'verification_test');
+    assertTest('Stripe hold released with status=released', releaseB.status === 'released' || (releaseB as any).status === 'canceled', {
+      releaseId: releaseB.releaseId,
       status: releaseB.status
     });
 

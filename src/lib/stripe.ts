@@ -169,7 +169,7 @@ export async function captureExecutionHold(holdId: string, amountCents: number):
 /**
  * Phase 3B: Void / Release (Failure -> Customer charged $0.00)
  */
-export async function releaseExecutionHold(holdId: string, reason: string): Promise<{
+export async function releaseExecutionHold(holdId: string, reason: string = 'execution_failed'): Promise<{
   releaseId: string;
   status: 'released';
   refundedAmountCents: number;

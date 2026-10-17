@@ -5,6 +5,17 @@ import path from 'path';
 
 const execAsync = promisify(exec);
 
+// Helper that executes CreateOS CLI using the valid API key or stored session
+function runCreateOs(cmd: string, timeout = 15000): Promise<{ stdout: string; stderr: string }> {
+  const env = { ...process.env };
+  if (process.env.CREATEOS_API_KEY && process.env.CREATEOS_API_KEY.startsWith('skp_')) {
+    env.CREATEOS_API_KEY = process.env.CREATEOS_API_KEY;
+  } else {
+    delete env.CREATEOS_API_KEY;
+  }
+  return execAsync(cmd, { env, timeout });
+}
+
 export interface SandboxExecutionResult {
   stdout: string;
   stderr: string;
@@ -15,14 +26,14 @@ export interface SandboxExecutionResult {
   sandboxId?: string;
 }
 
-// Active sandbox ID cache
-let activeSandboxId = 'sb-01m5602eqtye91wfs96kvyn6ed';
+// Active sandbox ID cache (Active Firecracker micro-VM)
+let activeSandboxId = 'sb-01m561fxede82rstkd4192t7m7';
 
 async function getOrCreateActiveSandbox(): Promise<string> {
   // Check if current sandbox is running
   if (activeSandboxId) {
     try {
-      const { stdout } = await execAsync('createos sandbox list --quiet');
+      const { stdout } = await runCreateOs('createos sandbox list --quiet');
       if (stdout.includes(activeSandboxId)) {
         return activeSandboxId;
       }
@@ -33,7 +44,7 @@ async function getOrCreateActiveSandbox(): Promise<string> {
 
   // Create a fresh CreateOS Firecracker micro-VM
   try {
-    const { stdout } = await execAsync('createos sandbox create --shape s-1vcpu-1gb --rootfs devbox:1 --auto-pause 10m');
+    const { stdout } = await runCreateOs('createos sandbox create --shape s-1vcpu-1gb --rootfs devbox:1 --auto-pause 10m');
     const match = stdout.match(/\((sb-[a-z0-9]+)\)/);
     if (match && match[1]) {
       activeSandboxId = match[1];
@@ -87,14 +98,19 @@ export async function executeInSandbox(
     `;
     fs.writeFileSync(tmpCode, fullScript, 'utf8');
 
+    const checkPaused = (err: any) => {
+      const allText = ((err?.stdout || '') + ' ' + (err?.stderr || '') + ' ' + (err?.message || ''));
+      return allText.includes('is paused') || allText.includes('Resume it first');
+    };
+
     // Push file to CreateOS micro-VM (handling auto-resume if paused)
     try {
-      await execAsync(`createos sandbox push ${sandboxId} ${tmpCode} /workspace/app_test.js`);
+      await runCreateOs(`createos sandbox push ${sandboxId} ${tmpCode} /workspace/app_test.js`);
     } catch (pushErr: any) {
-      if ((pushErr?.stderr || pushErr?.message || '').includes('is paused')) {
+      if (checkPaused(pushErr)) {
         console.log(`[CreateOS] Sandbox ${sandboxId} is paused. Resuming...`);
-        await execAsync(`createos sandbox resume ${sandboxId}`);
-        await execAsync(`createos sandbox push ${sandboxId} ${tmpCode} /workspace/app_test.js`);
+        await runCreateOs(`createos sandbox resume ${sandboxId}`);
+        await runCreateOs(`createos sandbox push ${sandboxId} ${tmpCode} /workspace/app_test.js`);
       } else {
         throw pushErr;
       }
@@ -103,16 +119,12 @@ export async function executeInSandbox(
     // Execute inside Firecracker micro-VM (handling auto-resume if paused)
     let execResult;
     try {
-      execResult = await execAsync(`createos sandbox exec ${sandboxId} -- node /workspace/app_test.js`, {
-        timeout: 15000
-      });
+      execResult = await runCreateOs(`createos sandbox exec ${sandboxId} -- node /workspace/app_test.js`, 15000);
     } catch (execErr: any) {
-      if ((execErr?.stderr || execErr?.message || '').includes('is paused')) {
+      if (checkPaused(execErr)) {
         console.log(`[CreateOS] Sandbox ${sandboxId} is paused during exec. Resuming...`);
-        await execAsync(`createos sandbox resume ${sandboxId}`);
-        execResult = await execAsync(`createos sandbox exec ${sandboxId} -- node /workspace/app_test.js`, {
-          timeout: 15000
-        });
+        await runCreateOs(`createos sandbox resume ${sandboxId}`);
+        execResult = await runCreateOs(`createos sandbox exec ${sandboxId} -- node /workspace/app_test.js`, 15000);
       } else {
         throw execErr;
       }
