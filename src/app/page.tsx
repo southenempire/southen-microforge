@@ -282,12 +282,12 @@ export default function Home() {
       <div className={`min-h-screen transition-colors duration-150 flex flex-col font-sans relative ${
         isDark ? 'bg-[#090a0f] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
       }`}>
-        {isDark && (
-          <div 
-            className="fixed inset-0 pointer-events-none z-0 opacity-40 bg-cover bg-center bg-no-repeat transition-opacity duration-300"
-            style={{ backgroundImage: "url('/anime-bg.jpg')" }}
-          />
-        )}
+        <div 
+          className={`fixed inset-0 pointer-events-none z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-300 ${
+            isDark ? 'opacity-40' : 'opacity-20 mix-blend-multiply'
+          }`}
+          style={{ backgroundImage: "url('/anime-bg.jpg')" }}
+        />
         {/* Navbar */}
         <header className={`border-b transition-colors sticky top-0 z-40 relative ${
           isDark ? 'border-zinc-800/80 bg-[#090a0f]/80 backdrop-blur-md' : 'border-zinc-200 bg-white/95 backdrop-blur-md'
@@ -518,11 +518,17 @@ export default function Home() {
   // =========================================================================
   if (viewMode === 'auth') {
     return (
-      <div className={`min-h-screen flex flex-col md:flex-row transition-colors ${
+      <div className={`min-h-screen flex flex-col md:flex-row transition-colors relative ${
         isDark ? 'bg-[#0f1012] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
       }`}>
+        <div 
+          className={`fixed inset-0 pointer-events-none z-0 bg-cover bg-center bg-no-repeat transition-opacity duration-300 ${
+            isDark ? 'opacity-30' : 'opacity-15 mix-blend-multiply'
+          }`}
+          style={{ backgroundImage: "url('/anime-bg.jpg')" }}
+        />
         {/* Left Side: Clean Social Login */}
-        <div className="w-full md:w-[55%] flex flex-col justify-between p-8 sm:p-12 lg:p-16">
+        <div className="w-full md:w-[55%] flex flex-col justify-between p-8 sm:p-12 lg:p-16 relative z-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleLogoClick}>
               <div className="h-7 w-7 rounded bg-black flex items-center justify-center text-white font-bold text-xs">
@@ -686,12 +692,12 @@ export default function Home() {
     <div className={`min-h-screen transition-colors duration-150 flex flex-col font-sans relative ${
       isDark ? 'bg-[#090a0f] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
     }`}>
-      {isDark && (
-        <div 
-          className="fixed inset-0 pointer-events-none z-0 opacity-25 bg-cover bg-bottom bg-no-repeat transition-opacity duration-300"
-          style={{ backgroundImage: "url('/anime-bg.jpg')" }}
-        />
-      )}
+      <div 
+        className={`fixed inset-0 pointer-events-none z-0 bg-cover bg-bottom bg-no-repeat transition-opacity duration-300 ${
+          isDark ? 'opacity-25' : 'opacity-15 mix-blend-multiply'
+        }`}
+        style={{ backgroundImage: "url('/anime-bg.jpg')" }}
+      />
       {/* Top Navbar */}
       <header className={`border-b transition-colors sticky top-0 z-40 relative ${
         isDark ? 'border-zinc-800/80 bg-[#090a0f]/80 backdrop-blur-md' : 'border-zinc-200 bg-white/95 backdrop-blur-md'
