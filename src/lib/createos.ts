@@ -58,22 +58,68 @@ export async function executeInSandbox(
   const sandboxId = await getOrCreateActiveSandbox();
 
   try {
-    // Write code to isolated temp file and push to CreateOS sandbox
+    // Write isolated runner script supporting both require('./app.js') and direct invocation
     const tmpCode = path.join('/tmp', `run_${Date.now()}.js`);
     const fullScript = `
       const assert = require('assert');
-      ${code}
-      ${testSuite}
+      const appModule = { exports: {} };
+      (function(module, exports) {
+        ${code}
+      })(appModule, appModule.exports);
+
+      // Support require('./app.js') in test suites
+      const _origRequire = typeof require !== 'undefined' ? require : null;
+      const customRequire = function(modulePath) {
+        if (modulePath === './app.js' || modulePath === '/workspace/app.js' || modulePath === 'app.js' || modulePath === './app') {
+          return appModule.exports;
+        }
+        return _origRequire ? _origRequire(modulePath) : {};
+      };
+
+      // Expose to module environment
+      const run = appModule.exports.run;
+      module.exports = appModule.exports;
+
+      // Execute test suite or runner wrapper
+      (function(require) {
+        ${testSuite}
+      })(customRequire);
     `;
     fs.writeFileSync(tmpCode, fullScript, 'utf8');
 
-    // Push file to CreateOS micro-VM
-    await execAsync(`createos sandbox push ${sandboxId} ${tmpCode} /workspace/app_test.js`);
+    // Push file to CreateOS micro-VM (handling auto-resume if paused)
+    try {
+      await execAsync(`createos sandbox push ${sandboxId} ${tmpCode} /workspace/app_test.js`);
+    } catch (pushErr: any) {
+      if ((pushErr?.stderr || pushErr?.message || '').includes('is paused')) {
+        console.log(`[CreateOS] Sandbox ${sandboxId} is paused. Resuming...`);
+        await execAsync(`createos sandbox resume ${sandboxId}`);
+        await execAsync(`createos sandbox push ${sandboxId} ${tmpCode} /workspace/app_test.js`);
+      } else {
+        throw pushErr;
+      }
+    }
     
-    // Execute inside Firecracker micro-VM
-    const { stdout, stderr } = await execAsync(`createos sandbox exec ${sandboxId} -- node /workspace/app_test.js`, {
-      timeout: 12000
-    });
+    // Execute inside Firecracker micro-VM (handling auto-resume if paused)
+    let execResult;
+    try {
+      execResult = await execAsync(`createos sandbox exec ${sandboxId} -- node /workspace/app_test.js`, {
+        timeout: 15000
+      });
+    } catch (execErr: any) {
+      if ((execErr?.stderr || execErr?.message || '').includes('is paused')) {
+        console.log(`[CreateOS] Sandbox ${sandboxId} is paused during exec. Resuming...`);
+        await execAsync(`createos sandbox resume ${sandboxId}`);
+        execResult = await execAsync(`createos sandbox exec ${sandboxId} -- node /workspace/app_test.js`, {
+          timeout: 15000
+        });
+      } else {
+        throw execErr;
+      }
+    }
+
+    const stdout = execResult.stdout || '';
+    const stderr = execResult.stderr || '';
 
     try { fs.unlinkSync(tmpCode); } catch (e) {}
 

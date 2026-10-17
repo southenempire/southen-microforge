@@ -65,13 +65,16 @@ export async function POST(req: Request) {
       // Create isolated guest execution wrapper preventing process.exit or leakages
       const wrappedRunner = `
         const inputData = ${JSON.stringify(inputPayload)};
-        const module = { exports: {} };
-        const exports = module.exports;
-        ${tool.generatedCode}
-        if (typeof module.exports.run !== 'function') {
+        let targetRun = null;
+        if (typeof module !== 'undefined' && module.exports && typeof module.exports.run === 'function') {
+          targetRun = module.exports.run;
+        } else if (typeof run === 'function') {
+          targetRun = run;
+        }
+        if (!targetRun) {
           throw new Error('Micro-tool module does not export run(input) function');
         }
-        const __res = module.exports.run(inputData);
+        const __res = targetRun(inputData);
         console.log('RESULT_OUTPUT:' + JSON.stringify(__res));
       `;
 
