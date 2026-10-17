@@ -279,12 +279,18 @@ export default function Home() {
   // =========================================================================
   if (viewMode === 'home') {
     return (
-      <div className={`min-h-screen transition-colors duration-150 flex flex-col font-sans ${
-        isDark ? 'bg-[#0f1012] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
+      <div className={`min-h-screen transition-colors duration-150 flex flex-col font-sans relative ${
+        isDark ? 'bg-[#090a0f] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
       }`}>
+        {isDark && (
+          <div 
+            className="fixed inset-0 pointer-events-none z-0 opacity-40 bg-cover bg-center bg-no-repeat transition-opacity duration-300"
+            style={{ backgroundImage: "url('/anime-bg.jpg')" }}
+          />
+        )}
         {/* Navbar */}
-        <header className={`border-b transition-colors sticky top-0 z-40 ${
-          isDark ? 'border-zinc-800 bg-[#0f1012]/95 backdrop-blur-md' : 'border-zinc-200 bg-white/95 backdrop-blur-md'
+        <header className={`border-b transition-colors sticky top-0 z-40 relative ${
+          isDark ? 'border-zinc-800/80 bg-[#090a0f]/80 backdrop-blur-md' : 'border-zinc-200 bg-white/95 backdrop-blur-md'
         }`}>
           <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
             <div className="flex items-center gap-8">
@@ -677,12 +683,18 @@ export default function Home() {
   // VIEW 3: WORKSPACE CONSOLE (Tools, Compiler, Ledger, Docs)
   // =========================================================================
   return (
-    <div className={`min-h-screen transition-colors duration-150 flex flex-col font-sans ${
-      isDark ? 'bg-[#0f1012] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
+    <div className={`min-h-screen transition-colors duration-150 flex flex-col font-sans relative ${
+      isDark ? 'bg-[#090a0f] text-zinc-100' : 'bg-[#f9fafb] text-zinc-900'
     }`}>
+      {isDark && (
+        <div 
+          className="fixed inset-0 pointer-events-none z-0 opacity-25 bg-cover bg-bottom bg-no-repeat transition-opacity duration-300"
+          style={{ backgroundImage: "url('/anime-bg.jpg')" }}
+        />
+      )}
       {/* Top Navbar */}
-      <header className={`border-b transition-colors sticky top-0 z-40 ${
-        isDark ? 'border-zinc-800 bg-[#0f1012]/95 backdrop-blur-md' : 'border-zinc-200 bg-white/95 backdrop-blur-md'
+      <header className={`border-b transition-colors sticky top-0 z-40 relative ${
+        isDark ? 'border-zinc-800/80 bg-[#090a0f]/80 backdrop-blur-md' : 'border-zinc-200 bg-white/95 backdrop-blur-md'
       }`}>
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-8">

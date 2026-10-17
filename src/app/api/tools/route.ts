@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
 import { store } from '@/lib/store';
+import { getPersistedTools, getPersistedLedger } from '@/lib/supabase';
 
 export async function GET(req: Request) {
   const url = new URL(req.url);
   const format = url.searchParams.get('format');
-  const tools = store.getTools();
+  const tools = await getPersistedTools(store.getTools());
   const executions = store.getExecutions();
-  const ledger = store.getLedger();
+  const ledger = await getPersistedLedger(store.getLedger());
 
   if (format === 'openai' || format === 'agent') {
     const agentTools = tools.map((t: any) => ({

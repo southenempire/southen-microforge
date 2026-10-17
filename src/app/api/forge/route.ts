@@ -3,6 +3,7 @@ import { generateMicroTool } from '@/lib/generator';
 import { executeInSandbox } from '@/lib/createos';
 import { provisionStripeRails } from '@/lib/stripe';
 import { store } from '@/lib/store';
+import { persistTool } from '@/lib/supabase';
 import { MicroTool, AgentStep } from '@/lib/types';
 
 export async function POST(req: Request) {
@@ -74,6 +75,7 @@ export async function POST(req: Request) {
     };
 
     store.addTool(newTool);
+    await persistTool(newTool);
 
     addStep('deploy', 'Deploying verified zero-devops live endpoint', 'completed', `Live at /api/tools/${spec.slug}`);
 

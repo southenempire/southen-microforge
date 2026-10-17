@@ -1,10 +1,11 @@
 import { NextResponse } from 'next/server';
 import { store } from '@/lib/store';
+import { getPersistedLedger, getPersistedTools } from '@/lib/supabase';
 
 export async function GET() {
-  const ledger = store.getLedger();
+  const ledger = await getPersistedLedger(store.getLedger());
   const executions = store.getExecutions();
-  const tools = store.getTools();
+  const tools = await getPersistedTools(store.getTools());
 
   return NextResponse.json({
     success: true,
