@@ -156,23 +156,34 @@ export async function executeInSandbox(
     if (stderr.includes('command not found') || stderr.includes('ENOENT')) {
       try {
         const vm = await import('vm');
-        const sandboxModule = { exports: {} as any };
-        const sandboxContext = {
-          module: sandboxModule,
-          exports: sandboxModule.exports,
-          require: (mod: string) => {
-            if (mod === './app.js' || mod === 'app.js' || mod === './app' || mod === '/workspace/app.js') return sandboxModule.exports;
-            if (mod === 'assert') return require('assert');
+        const runnerScript = `
+          const assert = require('assert');
+          const appModule = { exports: {} };
+          (function(module, exports) {
+            ${code}
+          })(appModule, appModule.exports);
+
+          const customRequire = function(modulePath) {
+            if (modulePath === './app.js' || modulePath === '/workspace/app.js' || modulePath === 'app.js' || modulePath === './app') {
+              return appModule.exports;
+            }
+            if (modulePath === 'assert') return assert;
             return {};
-          },
-          assert: require('assert'),
+          };
+
+          (function(require, assert) {
+            ${testSuite}
+          })(customRequire, assert);
+        `;
+
+        const sandboxContext = {
+          require: (mod: string) => (mod === 'assert' ? require('assert') : {}),
           Buffer,
           Date,
           console: { log: () => {}, error: () => {}, warn: () => {} },
         };
         vm.createContext(sandboxContext);
-        vm.runInContext(code, sandboxContext, { timeout: 3500 });
-        vm.runInContext(testSuite, sandboxContext, { timeout: 3500 });
+        vm.runInContext(runnerScript, sandboxContext, { timeout: 4000 });
         return {
           stdout: 'TESTS PASSED (Serverless Sandbox)',
           stderr: '',
