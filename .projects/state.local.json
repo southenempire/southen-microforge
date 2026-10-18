@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "project": {
+    "catalog": "prod",
+    "merchantId": "acct_1URdRvPmUIoLYsaZ",
+    "merchantDisplayName": "southen-microforge",
+    "projectId": "proj_southen-microforge",
+    "projectName": "southen-microforge"
+  },
+  "providers": {
+    "createos": {
+      "providerName": "createos"
+    },
+    "supabase": {
+      "providerName": "supabase"
+    },
+    "vercel": {
+      "providerName": "vercel"
+    }
+  },
+  "resources": {
+    "createos": {
+      "name": "createos",
+      "providerName": "createos",
+      "serviceId": "project"
+    },
+    "supabase": {
+      "name": "supabase",
+      "providerName": "supabase",
+      "serviceId": "project"
+    },
+    "vercel": {
+      "name": "vercel",
+      "providerName": "vercel",
+      "serviceId": "project"
+    }
+  }
+}
