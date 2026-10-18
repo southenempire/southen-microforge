@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "providers": {
+    "createos": {
+      "name": "createos"
+    },
+    "supabase": {
+      "name": "supabase"
+    },
+    "vercel": {
+      "name": "vercel"
+    }
+  },
+  "resources": {
+    "createos": {
+      "name": "createos",
+      "providerName": "createos",
+      "serviceId": "project"
+    },
+    "supabase": {
+      "name": "supabase",
+      "providerName": "supabase",
+      "serviceId": "project"
+    },
+    "vercel": {
+      "name": "vercel",
+      "providerName": "vercel",
+      "serviceId": "project"
+    }
+  },
+  "environments": {
+    "default": {
+      "output": ".env",
+      "resources": [
+        {
+          "resourceName": "createos"
+        },
+        {
+          "resourceName": "supabase"
+        },
+        {
+          "resourceName": "vercel"
+        }
+      ]
+    }
+  }
+}
