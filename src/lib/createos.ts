@@ -176,16 +176,21 @@ export async function executeInSandbox(
           })(customRequire);
         `;
 
+        let capturedStdout = '';
         const sandboxContext = {
           require: (mod: string) => (mod === 'assert' ? require('assert') : {}),
           Buffer,
           Date,
-          console: { log: () => {}, error: () => {}, warn: () => {} },
+          console: {
+            log: (...args: any[]) => { capturedStdout += args.join(' ') + '\n'; },
+            error: (...args: any[]) => {},
+            warn: () => {}
+          },
         };
         vm.createContext(sandboxContext);
         vm.runInContext(runnerScript, sandboxContext, { timeout: 4000 });
         return {
-          stdout: 'TESTS PASSED (Serverless Sandbox)',
+          stdout: capturedStdout || 'TESTS PASSED (Serverless Sandbox)',
           stderr: '',
           exitCode: 0,
           success: true,

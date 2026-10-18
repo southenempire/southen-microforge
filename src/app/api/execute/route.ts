@@ -65,8 +65,11 @@ export async function POST(req: Request) {
       // Create isolated guest execution wrapper preventing process.exit or leakages
       const wrappedRunner = `
         const inputData = ${JSON.stringify(inputPayload)};
+        const app = (typeof require === 'function') ? (require('./app.js') || require('app.js') || {}) : {};
         let targetRun = null;
-        if (typeof module !== 'undefined' && module.exports && typeof module.exports.run === 'function') {
+        if (typeof app.run === 'function') {
+          targetRun = app.run;
+        } else if (typeof module !== 'undefined' && module.exports && typeof module.exports.run === 'function') {
           targetRun = module.exports.run;
         } else if (typeof run === 'function') {
           targetRun = run;
