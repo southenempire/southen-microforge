@@ -90,7 +90,7 @@ export async function POST(req: Request) {
         } else {
           executionOutput = { success: true, message: 'Execution completed in sandbox', stdout: vmResult.stdout.slice(0, 300) };
         }
-      } else if (!vmResult.success && vmResult.stderr) {
+      } else if (!vmResult.success && vmResult.stderr && !vmResult.stderr.includes('command not found') && !vmResult.stderr.includes('ENOENT')) {
         executionError = vmResult.stderr.slice(0, 300);
       } else {
         // Fallback isolated hardened sandbox VM
