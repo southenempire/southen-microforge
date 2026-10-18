@@ -157,7 +157,7 @@ export async function executeInSandbox(
       try {
         const vm = await import('vm');
         const runnerScript = `
-          const assert = require('assert');
+          const _assert = require('assert');
           const appModule = { exports: {} };
           (function(module, exports) {
             ${code}
@@ -167,13 +167,13 @@ export async function executeInSandbox(
             if (modulePath === './app.js' || modulePath === '/workspace/app.js' || modulePath === 'app.js' || modulePath === './app') {
               return appModule.exports;
             }
-            if (modulePath === 'assert') return assert;
+            if (modulePath === 'assert') return _assert;
             return {};
           };
 
-          (function(require, assert) {
+          (function(require) {
             ${testSuite}
-          })(customRequire, assert);
+          })(customRequire);
         `;
 
         const sandboxContext = {
